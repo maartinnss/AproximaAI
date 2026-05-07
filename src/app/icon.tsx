@@ -15,9 +15,31 @@ export default function Icon() {
           justifyContent: 'center',
           background: 'linear-gradient(135deg, #6366f1, #a855f7)',
           borderRadius: '7px',
+          position: 'relative',
         }}
       >
-        <span style={{ color: 'white', fontSize: 20, lineHeight: 1 }}>⚡</span>
+        <div
+          style={{
+            position: 'absolute',
+            width: 15,
+            height: 15,
+            borderRadius: '50%',
+            background: 'rgba(255,255,255,0.88)',
+            left: 5,
+            top: 8,
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            width: 15,
+            height: 15,
+            borderRadius: '50%',
+            background: 'rgba(255,255,255,0.88)',
+            right: 5,
+            top: 8,
+          }}
+        />
       </div>
     ),
     { ...size }

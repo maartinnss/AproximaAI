@@ -10,10 +10,10 @@ import {
   Scissors,
   Users,
   LogOut,
-  Zap,
   Menu,
   X,
 } from 'lucide-react';
+import VennLogo from '@/components/VennLogo';
 import styles from './sidebar.module.css';
 
 const menuItems = [
@@ -45,10 +45,10 @@ export default function Sidebar() {
       <aside className={`${styles.sidebar} ${aberta ? styles.open : ''}`}>
         <div className={styles.logo}>
           <div className={styles.logoIcon}>
-            <Zap size={22} />
+            <VennLogo size={22} />
           </div>
           <div className={styles.logoText}>
-            <span className={styles.logoBrand}>Fila</span>
+            <span className={styles.logoBrand}>Aproxima</span>
             <span className={styles.logoAccent}>AI</span>
           </div>
           <button className={styles.closeBtn} onClick={() => setAberta(false)} aria-label="Fechar menu">

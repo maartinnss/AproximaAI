@@ -110,15 +110,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--accent-gradient);
-  background-size: 200% 200%;
+  background: transparent;
   border-radius: var(--radius-md);
   color: #fff;
   margin-bottom: 0.4rem;
-  box-shadow:
-    0 8px 20px -4px rgba(168, 85, 247, 0.40),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  animation: gradientShift 6s ease infinite;
+  box-shadow: 0 8px 20px -4px rgba(168, 85, 247, 0.40);
 }
 
 .logoText {

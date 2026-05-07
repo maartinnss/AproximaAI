@@ -16,20 +16,43 @@ export default function AppleIcon() {
           justifyContent: 'center',
           background: 'linear-gradient(135deg, #6366f1, #a855f7)',
           borderRadius: '38px',
-          gap: 6,
+          gap: 14,
+          position: 'relative',
         }}
       >
-        <span style={{ color: 'white', fontSize: 90, lineHeight: 1 }}>⚡</span>
+        <div style={{ display: 'flex', position: 'relative', width: 110, height: 70 }}>
+          <div
+            style={{
+              position: 'absolute',
+              width: 68,
+              height: 68,
+              borderRadius: '50%',
+              background: 'rgba(255,255,255,0.85)',
+              left: 0,
+              top: 0,
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              width: 68,
+              height: 68,
+              borderRadius: '50%',
+              background: 'rgba(255,255,255,0.85)',
+              right: 0,
+              top: 0,
+            }}
+          />
+        </div>
         <span
           style={{
             color: 'white',
-            fontSize: 30,
+            fontSize: 26,
             fontWeight: 900,
             letterSpacing: '-0.5px',
-            marginTop: 4,
           }}
         >
-          FilaAI
+          AproximaAI
         </span>
       </div>
     ),

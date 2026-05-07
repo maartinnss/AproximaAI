@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Zap, Search, CalendarDays, LogOut, User } from 'lucide-react';
+import { Search, CalendarDays, LogOut, User } from 'lucide-react';
+import Image from 'next/image';
 import styles from './cliente.module.css';
 
 interface ClienteInfo {
@@ -44,7 +45,7 @@ export default function ClienteLayout({ children }: { children: React.ReactNode 
       {/* Header Desktop + Mobile */}
       <header className={styles.header}>
         <Link href="/cliente/explorar" className={styles.logo}>
-          <div className={styles.logoIcon}><Zap size={18} /></div>
+          <div className={styles.logoIcon}><Image src="/logo.png" alt="FilaAI Logo" width={18} height={18} style={{ borderRadius: '2px' }} /></div>
           <span className={styles.logoBrand}>Fila</span>
           <span className={styles.logoAccent}>AI</span>
         </Link>

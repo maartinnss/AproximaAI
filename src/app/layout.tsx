@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "FilaAI — Agendamento Inteligente",
-  description: "Sistema inteligente de agendamento e controle de serviços para o seu comércio. Gerencie agendamentos, profissionais e serviços de forma simples.",
+  title: "AproximaAI — Agendamento Inteligente",
+  description: "AproximaAI conecta seu negócio ao WhatsApp com IA. Gerencie agendamentos, profissionais e serviços — e aproxime cada cliente do seu atendimento.",
   keywords: ["agendamento", "barbearia", "serviços", "gestão", "comércio"],
 };
 

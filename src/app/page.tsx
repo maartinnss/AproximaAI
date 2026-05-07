@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Zap, Mail, Lock, ArrowRight, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Eye, EyeOff, Sparkles } from 'lucide-react';
+import VennLogo from '@/components/VennLogo';
 import {
   credenciaisGestores,
   credenciaisClientes,
@@ -84,7 +85,7 @@ export default function LoginPage() {
         <div className={styles.card}>
           <div className={styles.header}>
             <div className={styles.logoIcon}>
-              <Zap size={26} />
+              <VennLogo size={44} />
             </div>
             <h1 className={styles.logoText}>
               <span>Fila</span>
@@ -184,7 +185,7 @@ export default function LoginPage() {
               onClick={() => router.push('/landing')}
             >
               <Sparkles size={14} />
-              Conhecer o FilaAI
+              Conhecer o AproximaAI
             </button>
           </div>
         </div>
