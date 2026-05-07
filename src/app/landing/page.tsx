@@ -3,10 +3,11 @@
 import { useState, useEffect, useRef, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  Zap, ArrowRight, BarChart3, Users, Bot,
+  ArrowRight, BarChart3, Users, Bot,
   MessageSquare, CalendarCheck, Shield, CheckCircle2,
   ChevronDown, Menu, X, Sparkles, Bell,
 } from 'lucide-react';
+import VennLogo from '@/components/VennLogo';
 import styles from './landing.module.css';
 
 /* ── Reveal on scroll ── */
@@ -117,9 +118,9 @@ function PhoneDemo() {
 
       <div className={styles.waHeader}>
         <div className={styles.waBack}>‹</div>
-        <div className={styles.waAvatar}>F</div>
+        <div className={styles.waAvatar}>A</div>
         <div className={styles.waInfo}>
-          <span className={styles.waName}>FilaAI Bot</span>
+          <span className={styles.waName}>AproximaAI Bot</span>
           <span className={styles.waOnline}>online</span>
         </div>
         <MessageSquare size={18} className={styles.waCallIcon} />
@@ -176,7 +177,7 @@ const steps = [
   {
     num: '02',
     title: 'IA entende e processa',
-    desc: 'O FilaAI analisa a disponibilidade em tempo real, identifica o serviço desejado e sugere opções em segundos.',
+    desc: 'O AproximaAI analisa a disponibilidade em tempo real, identifica o serviço desejado e sugere opções em segundos.',
   },
   {
     num: '03',
@@ -187,9 +188,9 @@ const steps = [
 
 const faqs = [
   { q: 'Preciso do WhatsApp Business?', a: 'Sim. Utilizamos a API oficial do WhatsApp Business. Nosso time cuida de toda a configuração durante o onboarding, é simples e rápido.' },
-  { q: 'Funciona para qualquer tipo de negócio?', a: 'FilaAI foi projetado para qualquer negócio que trabalha com atendimentos: barbearias, clínicas, salões, pet shops, consultórios e muito mais.' },
+  { q: 'Funciona para qualquer tipo de negócio?', a: 'AproximaAI foi projetado para qualquer negócio que trabalha com atendimentos: barbearias, clínicas, salões, pet shops, consultórios e muito mais.' },
   { q: 'E se o cliente fizer uma pergunta que a IA não souber?', a: 'Nesse caso a conversa é transferida para você com o histórico completo. Você define quando e como a IA deve transferir o atendimento.' },
-  { q: 'Preciso instalar alguma coisa?', a: 'Não. FilaAI é 100% na nuvem. Você acessa o painel pelo navegador em qualquer dispositivo, a qualquer hora.' },
+  { q: 'Preciso instalar alguma coisa?', a: 'Não. AproximaAI é 100% na nuvem. Você acessa o painel pelo navegador em qualquer dispositivo, a qualquer hora.' },
   { q: 'Como funciona o período de teste?', a: '14 dias completamente grátis, sem cartão de crédito. Você configura tudo, testa com clientes reais e só decide depois.' },
 ];
 
@@ -219,8 +220,8 @@ export default function LandingPage() {
       <nav className={`${styles.nav} ${scrolled ? styles.navScrolled : ''}`}>
         <div className={styles.navInner}>
           <a href="#hero" className={styles.navLogo}>
-            <Zap size={18} />
-            Fila<em>AI</em>
+            <VennLogo size={18} />
+            Aproxima<em>AI</em>
           </a>
 
           <ul className={`${styles.navLinks} ${menuOpen ? styles.navLinksOpen : ''}`}>
@@ -251,21 +252,21 @@ export default function LandingPage() {
             <Reveal>
               <span className={styles.badge}>
                 <Sparkles size={11} />
-                Atendimento com IA via WhatsApp
+                A IA que aproxima clientes ao seu negócio
               </span>
             </Reveal>
 
             <Reveal delay={80}>
               <h1 className={styles.heroH1}>
-                Seus clientes agendam<br />
-                pelo <span className={styles.heroGrad}>WhatsApp.</span><br />
-                A IA cuida do resto.
+                Cada cliente<br />
+                mais perto de <span className={styles.heroGrad}>você.</span><br />
+                O <span className={styles.heroGrad}>AproximaAI</span> cuida do resto.
               </h1>
             </Reveal>
 
             <Reveal delay={160}>
               <p className={styles.heroSub}>
-                FilaAI conecta seu negócio ao WhatsApp com um assistente inteligente que agenda, confirma, lembra e gerencia sua fila — tudo automaticamente, sem você precisar fazer nada.
+                AproximaAI conecta seu negócio ao WhatsApp com um assistente inteligente que agenda, confirma, lembra e gerencia — aproximando cada cliente do seu atendimento, automaticamente.
               </p>
             </Reveal>
 
@@ -386,7 +387,7 @@ export default function LandingPage() {
                 </div>
                 <p className={styles.planDesc}>Para quem está começando a organizar os atendimentos.</p>
                 <ul className={styles.planList}>
-                  {['Agendamento online ilimitado', 'Dashboard de métricas', 'Até 5 profissionais', 'Portal do cliente', 'Notificações por e-mail', 'Suporte por e-mail'].map((item, i) => (
+                  {['Agendamento online ilimitado', 'Dashboard de métricas', 'Até 5 profissionais', 'Notificações por e-mail', 'Suporte por e-mail'].map((item, i) => (
                     <li key={i}><CheckCircle2 size={14} />{item}</li>
                   ))}
                 </ul>
@@ -438,12 +439,12 @@ export default function LandingPage() {
         <div className={styles.ctaBg} />
         <Reveal>
           <h2 className={styles.ctaH2}>
-            Pronto para automatizar<br />seu atendimento?
+            Pronto para se aproximar<br />de mais clientes?
           </h2>
         </Reveal>
         <Reveal delay={80}>
           <p className={styles.ctaSub}>
-            Junte-se a mais de 500 estabelecimentos. Sem contratos longos. Cancele quando quiser.
+            Junte-se a mais de 500 estabelecimentos que já se aproximaram dos seus clientes. Cancele quando quiser.
           </p>
         </Reveal>
         <Reveal delay={160}>
@@ -459,10 +460,10 @@ export default function LandingPage() {
         <div className={styles.footerInner}>
           <div className={styles.footerBrand}>
             <div className={styles.footerLogo}>
-              <Zap size={17} />
-              Fila<em>AI</em>
+              <VennLogo size={17} />
+              Aproxima<em>AI</em>
             </div>
-            <p>Inteligência artificial a serviço do seu negócio.</p>
+            <p>A IA que aproxima clientes do seu negócio.</p>
           </div>
 
           <div className={styles.footerCols}>
@@ -488,7 +489,7 @@ export default function LandingPage() {
         </div>
 
         <div className={styles.footerBottom}>
-          <p>© 2025 FilaAI. Todos os direitos reservados.</p>
+          <p>© 2025 AproximaAI. Todos os direitos reservados.</p>
         </div>
       </footer>
 
