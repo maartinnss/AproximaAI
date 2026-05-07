@@ -1,12 +1,12 @@
 .page {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
   background-color: var(--bg-primary);
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md);
 }
 
 /* ─── Background Decorativo (gradient orbs) ─── */
@@ -72,7 +72,9 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 440px;
+  max-width: 400px;
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
 }
 
 .card {
@@ -81,7 +83,7 @@
   -webkit-backdrop-filter: blur(28px);
   border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: var(--radius-xl);
-  padding: 2.25rem 1.85rem;
+  padding: 1.25rem 1.5rem 1rem;
   box-shadow:
     0 20px 60px -12px rgba(99, 102, 241, 0.25),
     0 0 0 1px rgba(15, 23, 42, 0.04);
@@ -99,28 +101,28 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: 0.5rem;
 }
 
 .logoIcon {
-  width: 60px;
-  height: 60px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--accent-gradient);
   background-size: 200% 200%;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   color: #fff;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: 0.4rem;
   box-shadow:
-    0 12px 30px -6px rgba(168, 85, 247, 0.45),
+    0 8px 20px -4px rgba(168, 85, 247, 0.40),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
   animation: gradientShift 6s ease infinite;
 }
 
 .logoText {
-  font-size: 2.2rem;
+  font-size: 1.6rem;
   font-weight: 800;
   letter-spacing: -0.045em;
   color: var(--text-primary);
@@ -140,11 +142,11 @@
 
 .subtitle {
   color: var(--text-secondary);
-  font-size: 0.92rem;
-  margin-top: var(--spacing-md);
-  max-width: 290px;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  max-width: 260px;
   text-align: center;
-  line-height: 1.5;
+  line-height: 1.35;
   font-weight: 500;
 }
 
@@ -153,17 +155,17 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: 0.55rem;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .label {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -178,7 +180,7 @@
 
 .inputIcon {
   position: absolute;
-  left: 14px;
+  left: 12px;
   color: var(--text-tertiary);
   pointer-events: none;
   z-index: 1;
@@ -186,12 +188,12 @@
 
 .input {
   width: 100%;
-  padding: 0.85rem 1rem 0.85rem 2.85rem;
+  padding: 0.58rem 0.85rem 0.58rem 2.5rem;
   background: rgba(255, 255, 255, 0.75);
   border: 1px solid rgba(15, 23, 42, 0.10);
   border-radius: var(--radius-md);
   color: var(--text-primary);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 500;
   transition: border-color var(--transition-base), box-shadow var(--transition-base), background var(--transition-base);
 }
@@ -203,21 +205,21 @@
 .input:focus {
   border-color: var(--accent-primary-light);
   background: #fff;
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.14);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.14);
 }
 
 /* ─── Toggle Senha ─── */
 
 .eyeBtn {
   position: absolute;
-  right: 12px;
+  right: 10px;
   color: var(--text-tertiary);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px;
-  border-radius: 8px;
+  padding: 5px;
+  border-radius: 6px;
   transition: color var(--transition-fast), background var(--transition-fast);
 }
 
@@ -229,10 +231,10 @@
 /* ─── Erro ─── */
 
 .erro {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--color-danger);
   background: var(--color-danger-bg);
-  padding: 0.7rem 1rem;
+  padding: 0.5rem 0.75rem;
   border-radius: var(--radius-sm);
   border: 1px solid rgba(239, 68, 68, 0.20);
   font-weight: 500;
@@ -246,23 +248,23 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
-  padding: 0.95rem;
+  padding: 0.6rem;
   background: var(--accent-gradient);
   background-size: 200% 200%;
   color: #fff;
   font-weight: 700;
-  font-size: 0.98rem;
+  font-size: 0.9rem;
   border-radius: var(--radius-md);
-  box-shadow: 0 10px 28px -6px rgba(168, 85, 247, 0.42);
+  box-shadow: 0 8px 22px -4px rgba(168, 85, 247, 0.40);
   transition: transform var(--transition-base), box-shadow var(--transition-base), filter var(--transition-base);
   cursor: pointer;
-  margin-top: var(--spacing-sm);
+  margin-top: 0.1rem;
   letter-spacing: -0.005em;
 }
 
 .submitBtn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 16px 40px -8px rgba(236, 72, 153, 0.55);
+  box-shadow: 0 14px 36px -6px rgba(236, 72, 153, 0.50);
   filter: brightness(1.05);
   animation: gradientShift 3s ease infinite;
 }
@@ -279,9 +281,9 @@
 /* ─── Spinner ─── */
 
 .spinner {
-  width: 22px;
-  height: 22px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid rgba(255, 255, 255, 0.3);
   border-top-color: #fff;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
@@ -294,35 +296,42 @@
 /* ─── Demo Info ─── */
 
 .demoInfo {
-  margin-top: var(--spacing-xl);
-  padding: var(--spacing-md);
+  margin-top: 0.6rem;
+  padding: 0.5rem 0.6rem;
   background: rgba(255, 255, 255, 0.6);
   border: 1px solid rgba(99, 102, 241, 0.15);
   border-radius: var(--radius-md);
-  text-align: center;
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.45;
   font-weight: 500;
+}
+
+.demoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 0.75rem;
+}
+
+.demoCol {
+  text-align: center;
+}
+
+.demoCol:first-child {
+  border-right: 1px solid rgba(99, 102, 241, 0.15);
+  padding-right: 0.75rem;
 }
 
 .demoInfo strong {
   color: var(--text-primary);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  font-size: 0.6rem;
   background: var(--accent-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
-.demoDivider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.25), transparent);
-  margin: var(--spacing-sm) auto;
-  width: 70%;
 }
 
 /* ─── Link Landing ─── */
@@ -330,10 +339,9 @@
 .toLanding {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin-top: var(--spacing-lg);
-  padding: 0.55rem 1.1rem;
-  font-size: 0.82rem;
+  gap: 5px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.78rem;
   font-weight: 600;
   color: var(--accent-primary);
   background: rgba(99, 102, 241, 0.08);
@@ -354,12 +362,92 @@
 .cardFooter {
   display: flex;
   justify-content: center;
-  margin-top: var(--spacing-md);
+  margin-top: 0.6rem;
 }
 
-@media (max-width: 600px) {
-  .container { padding: 0; }
-  .card { padding: var(--spacing-xl) var(--spacing-lg); }
-  .logoText { font-size: 1.95rem; }
+/* ─── Responsividade ─── */
+
+/* Mobile pequeno */
+@media (max-width: 400px) {
+  .page { padding: 0.35rem; }
+  .container { max-width: 100%; }
+  .card {
+    padding: 1rem 0.85rem 0.85rem;
+    border-radius: var(--radius-lg);
+  }
+  .header { margin-bottom: 0.5rem; }
+  .logoIcon { width: 38px; height: 38px; margin-bottom: 0.35rem; }
+  .logoText { font-size: 1.4rem; }
+  .subtitle { font-size: 0.75rem; margin-top: 0.2rem; }
+  .form { gap: 0.5rem; }
+  .field { gap: 3px; }
+  .input { padding: 0.5rem 0.7rem 0.5rem 2.1rem; font-size: 0.82rem; }
+  .submitBtn { padding: 0.55rem; font-size: 0.85rem; }
+  .demoInfo { font-size: 0.66rem; padding: 0.4rem; margin-top: 0.5rem; line-height: 1.35; }
+  .demoInfo strong { font-size: 0.58rem; }
+  .demoGrid { grid-template-columns: 1fr; gap: 0.25rem; }
+  .demoCol:first-child { border-right: none; padding-right: 0; border-bottom: 1px solid rgba(99, 102, 241, 0.12); padding-bottom: 0.25rem; }
+  .cardFooter { margin-top: 0.35rem; }
+  .toLanding { padding: 0.3rem 0.7rem; font-size: 0.72rem; }
+  .shape1, .shape2, .shape3, .shape4 { display: none; }
+}
+
+/* Mobile médio */
+@media (min-width: 401px) and (max-width: 600px) {
+  .card {
+    padding: 1.25rem 1.15rem 1rem;
+  }
+  .logoText { font-size: 1.55rem; }
   .shape3, .shape4 { display: none; }
+}
+
+/* Telas com altura limitada (desktop 730px, tablets etc) */
+@media (max-height: 760px) {
+  .page { padding: 0.5rem; }
+  .card { padding: 1.15rem 1.35rem 0.9rem; }
+  .header { margin-bottom: 0.55rem; }
+  .logoIcon { width: 42px; height: 42px; margin-bottom: 0.35rem; }
+  .logoText { font-size: 1.55rem; }
+  .subtitle { font-size: 0.78rem; margin-top: 0.25rem; }
+  .form { gap: 0.5rem; }
+  .input { padding: 0.55rem 0.8rem 0.55rem 2.3rem; }
+  .submitBtn { padding: 0.6rem; }
+  .demoInfo { margin-top: 0.55rem; padding: 0.45rem 0.65rem; font-size: 0.68rem; line-height: 1.4; }
+  .cardFooter { margin-top: 0.45rem; }
+  .toLanding { padding: 0.32rem 0.8rem; font-size: 0.75rem; }
+}
+
+/* Telas curtas (landscape mobile, telas com pouca altura) */
+@media (max-height: 650px) {
+  .page { padding: 0.35rem; }
+  .card { padding: 0.9rem 1.1rem 0.75rem; }
+  .header { margin-bottom: 0.4rem; }
+  .logoIcon { width: 38px; height: 38px; margin-bottom: 0.3rem; }
+  .logoText { font-size: 1.4rem; }
+  .subtitle { font-size: 0.75rem; margin-top: 0.15rem; }
+  .form { gap: 0.4rem; }
+  .field { gap: 3px; }
+  .label { font-size: 0.65rem; }
+  .input { padding: 0.45rem 0.7rem 0.45rem 2.1rem; font-size: 0.84rem; }
+  .submitBtn { padding: 0.5rem; font-size: 0.88rem; }
+  .demoInfo { margin-top: 0.4rem; padding: 0.35rem 0.5rem; font-size: 0.65rem; line-height: 1.3; }
+  .demoInfo strong { font-size: 0.58rem; }
+  .cardFooter { margin-top: 0.35rem; }
+  .toLanding { padding: 0.28rem 0.7rem; font-size: 0.72rem; }
+}
+
+/* Telas muito curtas (landscape de telefone) */
+@media (max-height: 520px) {
+  .header { margin-bottom: 0.25rem; }
+  .logoIcon { width: 32px; height: 32px; margin-bottom: 0.2rem; }
+  .logoText { font-size: 1.25rem; }
+  .subtitle { display: none; }
+  .form { gap: 0.3rem; }
+  .field { gap: 2px; }
+  .label { font-size: 0.6rem; }
+  .input { padding: 0.35rem 0.6rem 0.35rem 1.9rem; font-size: 0.8rem; }
+  .submitBtn { padding: 0.4rem; font-size: 0.82rem; }
+  .demoInfo { margin-top: 0.25rem; padding: 0.25rem 0.4rem; font-size: 0.6rem; line-height: 1.25; }
+  .cardFooter { margin-top: 0.2rem; }
+  .toLanding { padding: 0.22rem 0.6rem; font-size: 0.68rem; }
 }

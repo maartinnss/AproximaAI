@@ -162,14 +162,19 @@ export default function LoginPage() {
           </form>
 
           <div className={styles.demoInfo}>
-            <p><strong>Demo — Gestor</strong></p>
-            <p>admin@barbearia.com / 123456</p>
-            <p>admin@belezaearte.com / 123456</p>
-            <p>admin@clinicavita.com / 123456</p>
-            <div className={styles.demoDivider} />
-            <p><strong>Demo — Cliente</strong></p>
-            <p>joao@email.com / 123456</p>
-            <p>marcos@email.com / 123456</p>
+            <div className={styles.demoGrid}>
+              <div className={styles.demoCol}>
+                <p><strong>Demo — Gestor</strong></p>
+                <p>admin@barbearia.com / 123456</p>
+                <p>admin@belezaearte.com / 123456</p>
+                <p>admin@clinicavita.com / 123456</p>
+              </div>
+              <div className={styles.demoCol}>
+                <p><strong>Demo — Cliente</strong></p>
+                <p>joao@email.com / 123456</p>
+                <p>marcos@email.com / 123456</p>
+              </div>
+            </div>
           </div>
 
           <div className={styles.cardFooter}>
