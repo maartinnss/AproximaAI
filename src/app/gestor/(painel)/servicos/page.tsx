@@ -12,6 +12,7 @@ export default function ServicosPage() {
   const [servicosList, setServicosList] = useState<Servico[]>([]);
   const [modalAberto, setModalAberto] = useState(false);
   const [editando, setEditando] = useState<Servico | null>(null);
+  const [excluindo, setExcluindo] = useState<Servico | null>(null);
   const [estabelecimentoId, setEstabelecimentoId] = useState('');
 
   useEffect(() => {
@@ -71,8 +72,10 @@ export default function ServicosPage() {
     setModalAberto(false);
   };
 
-  const excluir = (id: string) => {
-    setServicosList((prev) => prev.filter((s) => s.id !== id));
+  const excluir = () => {
+    if (!excluindo) return;
+    setServicosList((prev) => prev.filter((s) => s.id !== excluindo.id));
+    setExcluindo(null);
   };
 
   return (
@@ -107,7 +110,7 @@ export default function ServicosPage() {
                   </button>
                   <button
                     className={`${styles.actionBtn} ${styles.deleteBtn}`}
-                    onClick={() => excluir(servico.id)}
+                    onClick={() => setExcluindo(servico)}
                     aria-label={`Excluir ${servico.nome}`}
                   >
                     <Trash2 size={15} />
@@ -129,6 +132,22 @@ export default function ServicosPage() {
           ))}
         </div>
       </div>
+
+      {/* Modal de Confirmação de Exclusão */}
+      <Modal aberto={!!excluindo} onFechar={() => setExcluindo(null)} titulo="Excluir Serviço" largura="sm">
+        {excluindo && (
+          <div className={styles.excluirForm}>
+            <p className={styles.excluirTexto}>
+              Tem certeza que deseja excluir o serviço <strong>{excluindo.nome}</strong>?
+            </p>
+            <p className={styles.excluirAviso}>Esta ação não pode ser desfeita.</p>
+            <div className={styles.formActions}>
+              <button type="button" className={styles.btnSecundario} onClick={() => setExcluindo(null)}>Cancelar</button>
+              <button type="button" className={styles.btnPerigo} onClick={excluir}>Excluir</button>
+            </div>
+          </div>
+        )}
+      </Modal>
 
       {/* Modal de Cadastro/Edição */}
       <Modal

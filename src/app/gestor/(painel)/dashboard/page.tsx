@@ -100,27 +100,36 @@ export default function DashboardPage() {
             <div className={styles.graficoWrap}>
               <ResponsiveContainer width="100%" height={280}>
                 <LineChart data={graficoSemanal}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                  <XAxis dataKey="nome" stroke="#8b8b9e" fontSize={12} />
-                  <YAxis stroke="#8b8b9e" fontSize={12} />
+                  <defs>
+                    <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stopColor="#6366F1" />
+                      <stop offset="50%" stopColor="#A855F7" />
+                      <stop offset="100%" stopColor="#EC4899" />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="4 4" stroke="rgba(15,23,42,0.08)" />
+                  <XAxis dataKey="nome" stroke="#94A3B8" fontSize={12} fontWeight={500} />
+                  <YAxis stroke="#94A3B8" fontSize={12} fontWeight={500} />
                   <Tooltip
                     contentStyle={{
-                      background: 'var(--bg-secondary)',
-                      border: '1px solid var(--border-medium)',
-                      borderRadius: '8px',
-                      color: 'var(--text-primary)',
+                      background: 'rgba(255,255,255,0.96)',
+                      backdropFilter: 'blur(12px)',
+                      border: '1px solid rgba(15,23,42,0.08)',
+                      borderRadius: '12px',
+                      color: '#0F172A',
                       fontSize: '0.85rem',
-                      boxShadow: 'var(--shadow-md)'
+                      fontWeight: 600,
+                      boxShadow: '0 12px 32px -8px rgba(99,102,241,0.30)',
                     }}
-                    itemStyle={{ color: 'var(--text-primary)' }}
+                    itemStyle={{ color: '#0F172A' }}
                   />
                   <Line
                     type="monotone"
                     dataKey="atendimentos"
-                    stroke="#e4e4e7"
+                    stroke="url(#lineGrad)"
                     strokeWidth={3}
-                    dot={{ fill: '#e4e4e7', strokeWidth: 2, r: 5 }}
-                    activeDot={{ r: 7, fill: '#f4f4f5' }}
+                    dot={{ fill: '#A855F7', stroke: '#fff', strokeWidth: 2, r: 5 }}
+                    activeDot={{ r: 7, fill: '#EC4899', stroke: '#fff', strokeWidth: 2 }}
                     name="Atendimentos"
                   />
                 </LineChart>
@@ -133,27 +142,42 @@ export default function DashboardPage() {
             <div className={styles.graficoWrap}>
               <ResponsiveContainer width="100%" height={280}>
                 <BarChart data={receitaProf}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                  <XAxis dataKey="nome" stroke="#8b8b9e" fontSize={12} />
-                  <YAxis stroke="#8b8b9e" fontSize={12} />
+                  <defs>
+                    {[
+                      ['#6366F1', '#A855F7'],
+                      ['#A855F7', '#EC4899'],
+                      ['#EC4899', '#F43F5E'],
+                      ['#06B6D4', '#6366F1'],
+                      ['#10B981', '#06B6D4'],
+                      ['#F59E0B', '#EC4899'],
+                    ].map(([from, to], i) => (
+                      <linearGradient key={i} id={`barGrad-${i}`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={from} />
+                        <stop offset="100%" stopColor={to} />
+                      </linearGradient>
+                    ))}
+                  </defs>
+                  <CartesianGrid strokeDasharray="4 4" stroke="rgba(15,23,42,0.08)" />
+                  <XAxis dataKey="nome" stroke="#94A3B8" fontSize={12} fontWeight={500} />
+                  <YAxis stroke="#94A3B8" fontSize={12} fontWeight={500} />
                   <Tooltip
+                    cursor={{ fill: 'rgba(168, 85, 247, 0.08)' }}
                     contentStyle={{
-                      background: 'var(--bg-secondary)',
-                      border: '1px solid var(--border-medium)',
-                      borderRadius: '8px',
-                      color: 'var(--text-primary)',
+                      background: 'rgba(255,255,255,0.96)',
+                      backdropFilter: 'blur(12px)',
+                      border: '1px solid rgba(15,23,42,0.08)',
+                      borderRadius: '12px',
+                      color: '#0F172A',
                       fontSize: '0.85rem',
-                      boxShadow: 'var(--shadow-md)'
+                      fontWeight: 600,
+                      boxShadow: '0 12px 32px -8px rgba(99,102,241,0.30)',
                     }}
-                    itemStyle={{ color: 'var(--text-primary)' }}
+                    itemStyle={{ color: '#0F172A' }}
                     formatter={(value) => [`R$ ${Number(value).toLocaleString('pt-BR')}`, 'Receita']}
                   />
-                  <Bar dataKey="receita" radius={[6, 6, 0, 0]} name="Receita">
+                  <Bar dataKey="receita" radius={[8, 8, 0, 0]} name="Receita">
                     {receitaProf.map((_, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={index === 0 ? '#e4e4e7' : index === 1 ? '#a1a1aa' : index === 2 ? '#52525b' : index === 3 ? '#27272a' : '#18181b'}
-                      />
+                      <Cell key={`cell-${index}`} fill={`url(#barGrad-${index % 6})`} />
                     ))}
                   </Bar>
                 </BarChart>
@@ -170,32 +194,36 @@ export default function DashboardPage() {
                     data={distServicos}
                     cx="50%"
                     cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
-                    paddingAngle={4}
+                    innerRadius={62}
+                    outerRadius={104}
+                    paddingAngle={3}
                     dataKey="valor"
                     nameKey="nome"
-                    strokeWidth={0}
+                    stroke="#fff"
+                    strokeWidth={3}
                   >
-                    {distServicos.map((entry: any, index: number) => (
-                      <Cell key={`cell-${index}`} fill={entry.cor} />
-                    ))}
+                    {distServicos.map((_entry: any, index: number) => {
+                      const palette = ['#6366F1', '#A855F7', '#EC4899', '#06B6D4', '#10B981', '#F59E0B'];
+                      return <Cell key={`cell-${index}`} fill={palette[index % palette.length]} />;
+                    })}
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      background: 'var(--bg-secondary)',
-                      border: '1px solid var(--border-medium)',
-                      borderRadius: '8px',
-                      color: 'var(--text-primary)',
+                      background: 'rgba(255,255,255,0.96)',
+                      backdropFilter: 'blur(12px)',
+                      border: '1px solid rgba(15,23,42,0.08)',
+                      borderRadius: '12px',
+                      color: '#0F172A',
                       fontSize: '0.85rem',
-                      boxShadow: 'var(--shadow-md)'
+                      fontWeight: 600,
+                      boxShadow: '0 12px 32px -8px rgba(99,102,241,0.30)',
                     }}
-                    itemStyle={{ color: 'var(--text-primary)' }}
+                    itemStyle={{ color: '#0F172A' }}
                     formatter={(value) => [`${value}%`, 'Participação']}
                   />
                   <Legend
                     iconType="circle"
-                    wrapperStyle={{ fontSize: '0.75rem', color: '#8b8b9e' }}
+                    wrapperStyle={{ fontSize: '0.78rem', color: '#475569', fontWeight: 600 }}
                   />
                 </PieChart>
               </ResponsiveContainer>

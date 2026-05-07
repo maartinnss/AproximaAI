@@ -31,34 +31,25 @@
 }
 
 .graficoCard {
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 16px;
   padding: var(--spacing-lg);
-  transition: border-color var(--transition-base), box-shadow var(--transition-base);
-  animation: slideInUp 0.5s ease both;
+  box-shadow: 0 4px 16px -4px rgba(99, 102, 241, 0.10);
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+  animation: slideInUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .graficoCard:hover {
-  border-color: var(--border-accent);
-  box-shadow: var(--shadow-glow);
+  transform: translateY(-2px);
+  border-color: rgba(99, 102, 241, 0.20);
+  box-shadow: 0 14px 36px -10px rgba(99, 102, 241, 0.20);
 }
 
-.graficoLinha {
-  grid-column: 1 / 2;
-  animation-delay: 0.1s;
-}
-
-.graficoBarra {
-  grid-column: 2 / 3;
-  animation-delay: 0.2s;
-}
-
-.graficoPizza {
-  grid-column: 1 / 3;
-  animation-delay: 0.3s;
-}
+.graficoLinha { grid-column: 1 / 2; animation-delay: 0.05s; }
+.graficoBarra { grid-column: 2 / 3; animation-delay: 0.10s; }
+.graficoPizza { grid-column: 1 / 3; animation-delay: 0.15s; }
 
 @media (max-width: 960px) {
   .graficos { grid-template-columns: 1fr; }
@@ -68,38 +59,39 @@
 }
 
 .graficoTitulo {
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 700;
   color: var(--text-primary);
   margin-bottom: var(--spacing-lg);
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
 }
 
-.graficoWrap {
-  width: 100%;
-}
+.graficoWrap { width: 100%; }
 
 /* ─── Tabela ─── */
 
 .tabelaSection {
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 16px;
   padding: var(--spacing-lg);
-  animation: slideInUp 0.5s ease both;
-  animation-delay: 0.4s;
+  box-shadow: 0 4px 16px -4px rgba(99, 102, 241, 0.10);
+  animation: slideInUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.2s;
 }
 
 .tabelaTitulo {
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 700;
   color: var(--text-primary);
   margin-bottom: var(--spacing-lg);
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
 }
 
-.tabelaWrap {
-  overflow-x: auto;
-}
+.tabelaWrap { overflow-x: auto; }
 
 .tabela {
   width: 100%;
@@ -108,17 +100,17 @@
 
 .tabela thead th {
   text-align: left;
-  padding: 0.75rem 1rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--text-secondary);
+  padding: 0.85rem 1rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 1px solid var(--border-subtle);
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
 
 .tabela tbody tr {
-  transition: background var(--transition-fast);
+  transition: background var(--transition-base);
 }
 
 .tabela tbody tr:hover {
@@ -127,33 +119,37 @@
 
 .tabela tbody td {
   padding: 0.85rem 1rem;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   color: var(--text-primary);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+  font-weight: 500;
 }
+
+.tabela tbody tr:last-child td { border-bottom: none; }
 
 .clienteCell {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: 0.65rem;
 }
 
 .clienteAvatar {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--text-secondary);
+  background: var(--accent-gradient-soft);
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  border-radius: 9px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-primary);
   flex-shrink: 0;
+  font-family: var(--font-display);
 }
 
 .valor {
-  font-weight: 600;
-  color: var(--color-success) !important;
+  font-weight: 700 !important;
+  color: var(--c-emerald) !important;
 }

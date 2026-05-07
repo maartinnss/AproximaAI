@@ -6,9 +6,10 @@
   position: relative;
   overflow: hidden;
   background-color: var(--bg-primary);
+  padding: var(--spacing-lg);
 }
 
-/* ─── Background Decorativo ─── */
+/* ─── Background Decorativo (gradient orbs) ─── */
 
 .bgDecoration {
   position: absolute;
@@ -17,32 +18,52 @@
   pointer-events: none;
 }
 
-.orbe1 {
+.shape1, .shape2, .shape3, .shape4 {
   position: absolute;
-  top: -10%;
-  right: -10%;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(94, 106, 210, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
   filter: blur(80px);
-  animation: floatOrb 20s ease-in-out infinite alternate;
 }
 
-.orbe2 {
-  position: absolute;
+.shape1 {
+  top: -8%;
+  right: -5%;
+  width: 460px;
+  height: 460px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.30) 0%, transparent 70%);
+  animation: floatOrb 18s ease-in-out infinite alternate;
+}
+
+.shape2 {
   bottom: -10%;
-  left: -10%;
-  width: 450px;
-  height: 450px;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
-  filter: blur(70px);
-  animation: floatOrb 16s ease-in-out infinite alternate-reverse;
+  left: -8%;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.26) 0%, transparent 70%);
+  animation: floatOrb 22s ease-in-out infinite alternate-reverse;
+}
+
+.shape3 {
+  top: 40%;
+  left: 20%;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.18) 0%, transparent 70%);
+  animation: floatOrb 16s ease-in-out infinite alternate;
+}
+
+.shape4 {
+  top: 8%;
+  left: 6%;
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.14) 0%, transparent 70%);
+  animation: floatOrb 20s ease-in-out infinite alternate-reverse;
 }
 
 @keyframes floatOrb {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(5%, 5%) scale(1.1); }
-  100% { transform: translate(-5%, -5%) scale(0.95); }
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(4%, 4%) scale(1.08); }
+  100% { transform: translate(-4%, -3%) scale(0.95); }
 }
 
 /* ─── Container / Card ─── */
@@ -51,18 +72,25 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 460px;
-  padding: var(--spacing-lg);
+  max-width: 440px;
 }
 
 .card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: var(--radius-xl);
-  padding: var(--spacing-2xl);
-  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: var(--shadow-lg), 0 0 60px rgba(94, 106, 210, 0.08);
-  backdrop-filter: blur(20px);
+  padding: 2.25rem 1.85rem;
+  box-shadow:
+    0 20px 60px -12px rgba(99, 102, 241, 0.25),
+    0 0 0 1px rgba(15, 23, 42, 0.04);
+  animation: cardIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* ─── Header / Logo ─── */
@@ -71,28 +99,35 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: var(--spacing-xl);
 }
 
 .logoIcon {
-  width: 68px;
-  height: 68px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--accent-gradient);
-  border: 3px solid var(--bg-secondary);
-  border-radius: var(--radius-xl);
-  color: #ffffff;
+  background-size: 200% 200%;
+  border-radius: var(--radius-lg);
+  color: #fff;
   margin-bottom: var(--spacing-md);
-  box-shadow: 0 10px 25px rgba(94, 106, 210, 0.25);
+  box-shadow:
+    0 12px 30px -6px rgba(168, 85, 247, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  animation: gradientShift 6s ease infinite;
 }
 
 .logoText {
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   font-weight: 800;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.045em;
   color: var(--text-primary);
+  font-family: var(--font-display);
+  line-height: 1;
+  display: flex;
+  align-items: baseline;
 }
 
 .logoAccent {
@@ -100,37 +135,39 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  margin-left: 2px;
 }
 
 .subtitle {
   color: var(--text-secondary);
-  font-size: 0.95rem;
-  margin-top: var(--spacing-xs);
-  max-width: 320px;
+  font-size: 0.92rem;
+  margin-top: var(--spacing-md);
+  max-width: 290px;
   text-align: center;
   line-height: 1.5;
+  font-weight: 500;
 }
 
-/* ─── Formulário ─── */
+/* ─── Form ─── */
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: 6px;
 }
 
 .label {
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-size: 0.75rem;
+  font-weight: 700;
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.06em;
 }
 
 .inputWrap {
@@ -144,17 +181,19 @@
   left: 14px;
   color: var(--text-tertiary);
   pointer-events: none;
+  z-index: 1;
 }
 
 .input {
   width: 100%;
-  padding: 0.85rem 1rem 0.85rem 2.75rem;
-  background: var(--bg-input);
-  border: 1px solid var(--border-subtle);
+  padding: 0.85rem 1rem 0.85rem 2.85rem;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(15, 23, 42, 0.10);
   border-radius: var(--radius-md);
   color: var(--text-primary);
-  font-size: 0.9rem;
-  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), background var(--transition-base);
 }
 
 .input::placeholder {
@@ -163,7 +202,8 @@
 
 .input:focus {
   border-color: var(--accent-primary-light);
-  box-shadow: 0 0 0 3px rgba(94, 106, 210, 0.15);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.14);
 }
 
 /* ─── Toggle Senha ─── */
@@ -176,50 +216,55 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
-  transition: color var(--transition-fast);
+  padding: 6px;
+  border-radius: 8px;
+  transition: color var(--transition-fast), background var(--transition-fast);
 }
 
 .eyeBtn:hover {
-  color: var(--text-secondary);
+  color: var(--accent-primary);
+  background: var(--bg-hover);
 }
 
 /* ─── Erro ─── */
 
 .erro {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--color-danger);
   background: var(--color-danger-bg);
-  padding: 0.6rem 1rem;
+  padding: 0.7rem 1rem;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.20);
+  font-weight: 500;
   animation: fadeIn 0.3s ease;
 }
 
-/* ─── Botão Enviar ─── */
+/* ─── Submit ─── */
 
 .submitBtn {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
-  padding: 0.9rem;
+  padding: 0.95rem;
   background: var(--accent-gradient);
-  color: #ffffff;
+  background-size: 200% 200%;
+  color: #fff;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.98rem;
   border-radius: var(--radius-md);
-  transition: all var(--transition-base);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 10px 28px -6px rgba(168, 85, 247, 0.42);
+  transition: transform var(--transition-base), box-shadow var(--transition-base), filter var(--transition-base);
   cursor: pointer;
-  border: none;
   margin-top: var(--spacing-sm);
+  letter-spacing: -0.005em;
 }
 
 .submitBtn:hover:not(:disabled) {
-  background: var(--accent-gradient-hover);
-  box-shadow: var(--shadow-glow);
   transform: translateY(-2px);
+  box-shadow: 0 16px 40px -8px rgba(236, 72, 153, 0.55);
+  filter: brightness(1.05);
+  animation: gradientShift 3s ease infinite;
 }
 
 .submitBtn:active:not(:disabled) {
@@ -237,7 +282,7 @@
   width: 22px;
   height: 22px;
   border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
+  border-top-color: #fff;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -250,37 +295,71 @@
 
 .demoInfo {
   margin-top: var(--spacing-xl);
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  border-radius: var(--radius-md);
   text-align: center;
-  font-size: 0.75rem;
-  color: var(--text-tertiary);
-  padding-top: var(--spacing-lg);
-  border-top: 1px solid var(--border-subtle);
-  line-height: 1.8;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-weight: 500;
 }
 
 .demoInfo strong {
-  color: var(--text-secondary);
+  color: var(--text-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.7rem;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .demoDivider {
   height: 1px;
-  background: var(--border-subtle);
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.25), transparent);
   margin: var(--spacing-sm) auto;
-  width: 60%;
+  width: 70%;
 }
 
-/* ─── Responsividade ─── */
+/* ─── Link Landing ─── */
+
+.toLanding {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--spacing-lg);
+  padding: 0.55rem 1.1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  border-radius: 100px;
+  transition: all var(--transition-base);
+  cursor: pointer;
+  align-self: center;
+}
+
+.toLanding:hover {
+  background: rgba(99, 102, 241, 0.14);
+  border-color: rgba(99, 102, 241, 0.32);
+  color: var(--accent-secondary);
+  transform: translateY(-1px);
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--spacing-md);
+}
 
 @media (max-width: 600px) {
-  .container {
-    padding: var(--spacing-md);
-  }
-
-  .card {
-    padding: var(--spacing-xl) var(--spacing-lg);
-  }
-
-  .logoText {
-    font-size: 2rem;
-  }
+  .container { padding: 0; }
+  .card { padding: var(--spacing-xl) var(--spacing-lg); }
+  .logoText { font-size: 1.95rem; }
+  .shape3, .shape4 { display: none; }
 }

@@ -9,11 +9,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
 }
 
 .count {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+  font-size: 0.82rem;
+  color: var(--accent-primary);
+  font-weight: 600;
+  padding: 0.4rem 0.95rem;
+  background: var(--accent-gradient-soft);
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  border-radius: 100px;
+  display: inline-block;
 }
 
 /* ─── Grid de Cards ─── */
@@ -25,36 +33,38 @@
 }
 
 .card {
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 16px;
   padding: var(--spacing-lg);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
   transition: all var(--transition-base);
-  animation: slideInUp 0.4s ease both;
+  animation: slideInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  box-shadow: 0 4px 16px -4px rgba(99, 102, 241, 0.10);
 }
 
 .card:hover {
-  border-color: var(--border-accent);
-  box-shadow: var(--shadow-glow);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  border-color: rgba(99, 102, 241, 0.25);
+  box-shadow: 0 16px 36px -10px rgba(99, 102, 241, 0.25);
 }
 
 .inativo {
-  opacity: 0.6;
+  opacity: 0.55;
 }
 
 .inativo:hover {
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 .cardTop {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: var(--spacing-sm);
 }
 
 .avatarWrap {
@@ -62,25 +72,26 @@
 }
 
 .avatar {
-  width: 52px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-tertiary);
-  border: 2px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  background: var(--accent-gradient-soft);
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  border-radius: 14px;
   font-size: 1rem;
   font-weight: 800;
-  color: var(--text-secondary);
+  color: var(--accent-primary);
   transition: all var(--transition-base);
+  font-family: var(--font-display);
 }
 
 .avatarAtivo {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  border-color: var(--border-accent);
-  box-shadow: var(--shadow-sm);
+  background: var(--accent-gradient);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 8px 22px -6px rgba(168, 85, 247, 0.45);
 }
 
 .statusDot {
@@ -90,31 +101,32 @@
   width: 14px;
   height: 14px;
   border-radius: var(--radius-full);
-  border: 3px solid var(--bg-card);
+  border: 3px solid var(--bg-secondary);
 }
 
-.online { background: var(--color-success); }
+.online { background: var(--c-emerald); box-shadow: 0 0 8px rgba(16, 185, 129, 0.5); }
 .offline { background: var(--text-tertiary); }
 
 .cardActions {
   display: flex;
-  gap: 4px;
+  gap: 5px;
 }
 
 .actionBtn {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-sm);
-  color: var(--text-secondary);
+  border-radius: 9px;
+  color: var(--text-tertiary);
+  background: var(--bg-tertiary);
   transition: all var(--transition-base);
   cursor: pointer;
 }
 
 .actionBtn:hover {
-  color: var(--text-primary);
+  color: var(--accent-primary);
   background: var(--bg-hover);
 }
 
@@ -126,17 +138,20 @@
 .cardBody {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .cardNome {
-  font-size: 1.05rem;
-  font-weight: 700;
+  font-size: 1.08rem;
+  font-weight: 800;
   color: var(--text-primary);
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .cardEspecialidade {
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: var(--text-secondary);
   font-weight: 500;
 }
@@ -151,46 +166,51 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: var(--text-secondary);
+  font-weight: 500;
 }
 
 .cardFooter {
   padding-top: var(--spacing-md);
-  border-top: 1px solid var(--border-subtle);
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
 }
 
 .toggleBtn {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: 0.5rem;
   font-size: 0.8rem;
   font-weight: 600;
-  padding: 6px 12px;
-  border-radius: var(--radius-md);
+  padding: 7px 14px;
+  border-radius: 100px;
+  border: 1px solid transparent;
   transition: all var(--transition-base);
   cursor: pointer;
 }
 
 .toggleAtivo {
-  color: var(--color-success);
-  background: var(--color-success-bg);
+  color: var(--c-emerald);
+  background: var(--c-emerald-soft);
+  border-color: rgba(16, 185, 129, 0.25);
 }
 
 .toggleAtivo:hover {
-  background: rgba(0, 184, 148, 0.2);
+  background: rgba(16, 185, 129, 0.18);
 }
 
 .toggleInativo {
   color: var(--text-tertiary);
   background: var(--bg-tertiary);
+  border-color: rgba(15, 23, 42, 0.06);
 }
 
 .toggleInativo:hover {
   color: var(--text-secondary);
+  background: var(--bg-hover);
 }
 
-/* ─── Formulário no Modal ─── */
+/* ─── Form Modal ─── */
 
 .form {
   display: flex;
@@ -215,7 +235,68 @@
   justify-content: flex-end;
   gap: var(--spacing-sm);
   padding-top: var(--spacing-md);
-  border-top: 1px solid var(--border-subtle);
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+/* ─── Modal Excluir ─── */
+
+.excluirForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.excluirTexto {
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.excluirAviso {
+  font-size: 0.85rem;
+  color: var(--color-danger);
+  font-weight: 600;
+  background: var(--color-danger-bg);
+  border: 1px solid rgba(239, 68, 68, 0.22);
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+}
+
+.btnSecundario {
+  padding: 0.65rem 1.2rem;
+  background: var(--bg-tertiary);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btnSecundario:hover {
+  border-color: var(--accent-primary-light);
+  color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.btnPerigo {
+  padding: 0.65rem 1.4rem;
+  background: var(--color-danger);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 16px -4px rgba(239, 68, 68, 0.4);
+  transition: all var(--transition-base);
+}
+
+.btnPerigo:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px -6px rgba(239, 68, 68, 0.5);
 }
 
 @media (max-width: 640px) {

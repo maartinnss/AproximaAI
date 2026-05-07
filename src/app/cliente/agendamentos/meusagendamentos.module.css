@@ -29,6 +29,15 @@
 .emptyLink { display: inline-block; margin-top: var(--spacing-md); color: var(--accent-primary); font-weight: 600; }
 .emptyText { color: var(--text-tertiary); font-size: 0.85rem; }
 
+.excluirForm { display: flex; flex-direction: column; gap: var(--spacing-md); }
+.excluirTexto { font-size: 0.92rem; color: var(--text-primary); line-height: 1.6; }
+.excluirAviso { font-size: 0.85rem; color: var(--color-danger); font-weight: 600; background: var(--color-danger-bg); border: 1px solid rgba(239, 68, 68, 0.22); border-radius: 10px; padding: 0.7rem 1rem; }
+.confirmAcoes { display: flex; justify-content: flex-end; gap: var(--spacing-sm); padding-top: var(--spacing-md); border-top: 1px solid var(--border-subtle); }
+.btnSecundario { padding: 0.65rem 1.2rem; background: var(--bg-tertiary); border: 1px solid rgba(15, 23, 42, 0.08); border-radius: 10px; color: var(--text-secondary); font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all var(--transition-base); }
+.btnSecundario:hover { border-color: var(--accent-primary-light); color: var(--accent-primary); background: var(--bg-hover); }
+.btnPerigo { padding: 0.65rem 1.4rem; background: var(--color-danger); border: none; border-radius: 10px; color: #fff; font-size: 0.88rem; font-weight: 700; cursor: pointer; box-shadow: 0 6px 16px -4px rgba(239, 68, 68, 0.4); transition: all var(--transition-base); }
+.btnPerigo:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
 @media (max-width: 600px) {
   .page { padding: var(--spacing-md); }
   .title { font-size: 1.3rem; }

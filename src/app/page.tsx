@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Zap, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { Zap, Mail, Lock, ArrowRight, Eye, EyeOff, Sparkles } from 'lucide-react';
 import {
   credenciaisGestores,
   credenciaisClientes,
@@ -73,16 +73,18 @@ export default function LoginPage() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.bgDecoration}>
-        <div className={styles.orbe1} />
-        <div className={styles.orbe2} />
+      <div className={styles.bgDecoration} aria-hidden="true">
+        <div className={styles.shape1} />
+        <div className={styles.shape2} />
+        <div className={styles.shape3} />
+        <div className={styles.shape4} />
       </div>
 
       <div className={styles.container}>
         <div className={styles.card}>
           <div className={styles.header}>
             <div className={styles.logoIcon}>
-              <Zap size={32} />
+              <Zap size={26} />
             </div>
             <h1 className={styles.logoText}>
               <span>Fila</span>
@@ -160,14 +162,25 @@ export default function LoginPage() {
           </form>
 
           <div className={styles.demoInfo}>
-            <p><strong>Demo — Gestor:</strong></p>
+            <p><strong>Demo — Gestor</strong></p>
             <p>admin@barbearia.com / 123456</p>
             <p>admin@belezaearte.com / 123456</p>
             <p>admin@clinicavita.com / 123456</p>
             <div className={styles.demoDivider} />
-            <p><strong>Demo — Cliente:</strong></p>
+            <p><strong>Demo — Cliente</strong></p>
             <p>joao@email.com / 123456</p>
             <p>marcos@email.com / 123456</p>
+          </div>
+
+          <div className={styles.cardFooter}>
+            <button
+              type="button"
+              className={styles.toLanding}
+              onClick={() => router.push('/landing')}
+            >
+              <Sparkles size={14} />
+              Conhecer o FilaAI
+            </button>
           </div>
         </div>
       </div>

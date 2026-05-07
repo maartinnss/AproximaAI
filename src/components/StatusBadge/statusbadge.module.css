@@ -2,11 +2,12 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 12px;
-  border-radius: 20px;
+  padding: 4px 11px;
+  border-radius: 100px;
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
 }
 
 .dot {
@@ -16,25 +17,29 @@
 }
 
 .confirmado {
-  background: var(--color-success-bg);
-  color: var(--color-success);
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.25);
+  color: var(--c-emerald);
 }
-.confirmado .dot { background: var(--color-success); }
+.confirmado .dot { background: var(--c-emerald); box-shadow: 0 0 6px rgba(16, 185, 129, 0.6); }
 
 .pendente {
-  background: var(--color-warning-bg);
-  color: var(--color-warning);
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.25);
+  color: var(--c-amber);
 }
-.pendente .dot { background: var(--color-warning); animation: pulse 2s infinite; }
+.pendente .dot { background: var(--c-amber); box-shadow: 0 0 6px rgba(245, 158, 11, 0.6); animation: pulse 2s infinite; }
 
 .concluido {
-  background: var(--color-info-bg);
-  color: var(--color-info);
+  background: rgba(99, 102, 241, 0.10);
+  border-color: rgba(99, 102, 241, 0.25);
+  color: var(--accent-primary);
 }
-.concluido .dot { background: var(--color-info); }
+.concluido .dot { background: var(--accent-primary); box-shadow: 0 0 6px rgba(99, 102, 241, 0.6); }
 
 .cancelado {
-  background: var(--color-danger-bg);
+  background: rgba(239, 68, 68, 0.10);
+  border-color: rgba(239, 68, 68, 0.25);
   color: var(--color-danger);
 }
-.cancelado .dot { background: var(--color-danger); }
+.cancelado .dot { background: var(--color-danger); box-shadow: 0 0 6px rgba(239, 68, 68, 0.6); }

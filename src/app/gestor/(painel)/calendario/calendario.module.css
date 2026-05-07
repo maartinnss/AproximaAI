@@ -1,0 +1,596 @@
+.content {
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* ─── Card do Calendário ─── */
+
+.calendarioCard {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 18px;
+  padding: var(--spacing-lg);
+  box-shadow: 0 4px 16px -4px rgba(99, 102, 241, 0.10);
+  animation: fadeIn 0.4s ease;
+}
+
+/* ─── Navegação de mês ─── */
+
+.mesNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.navBtn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tertiary);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.navBtn:hover {
+  background: var(--accent-gradient-soft);
+  border-color: rgba(99, 102, 241, 0.25);
+  color: var(--accent-primary);
+  transform: translateY(-1px);
+}
+
+.mesLabel {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.025em;
+  font-family: var(--font-display);
+  text-transform: capitalize;
+}
+
+/* ─── Grade do calendário ─── */
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.diaHeader {
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 0;
+}
+
+.diaCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 0.55rem 0.25rem;
+  min-height: 64px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.diaCell:hover:not(.selecionado) {
+  background: var(--bg-hover);
+  border-color: rgba(99, 102, 241, 0.18);
+}
+
+.diaNum {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1;
+  font-family: var(--font-display);
+}
+
+.outromes .diaNum { color: var(--text-tertiary); opacity: 0.55; }
+
+.hoje {
+  background: var(--accent-gradient-soft) !important;
+  border-color: rgba(99, 102, 241, 0.32) !important;
+}
+.hoje .diaNum {
+  color: var(--accent-primary);
+  font-weight: 800;
+}
+
+.selecionado {
+  background: var(--accent-gradient) !important;
+  border-color: transparent !important;
+  box-shadow: 0 8px 22px -6px rgba(168, 85, 247, 0.45);
+}
+.selecionado .diaNum {
+  color: #fff !important;
+  font-weight: 800;
+}
+.selecionado .dot { border: 1.5px solid rgba(255, 255, 255, 0.6); }
+
+/* ─── Dots de status ─── */
+
+.dots {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dotMais {
+  font-size: 0.6rem;
+  color: var(--text-tertiary);
+  font-weight: 600;
+}
+
+/* ─── Legenda ─── */
+
+.legenda {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+  flex-wrap: wrap;
+}
+
+.legendaItem {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.legendaLabel {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ─── Painel do dia ─── */
+
+.painelDia {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 18px;
+  padding: var(--spacing-lg);
+  box-shadow: 0 4px 16px -4px rgba(99, 102, 241, 0.10);
+  animation: fadeIn 0.35s ease;
+}
+
+.painelHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.painelIcon {
+  color: var(--accent-primary);
+  background: var(--accent-gradient-soft);
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  border-radius: 9px;
+  padding: 5px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+}
+
+.painelTitulo {
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-transform: capitalize;
+  line-height: 1.2;
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+.painelContagem {
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+  display: block;
+  font-weight: 500;
+}
+
+/* ─── Estado vazio ─── */
+
+.vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-2xl) 0;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+.vazio p { font-size: 0.9rem; font-weight: 500; }
+
+/* ─── Lista de agendamentos ─── */
+
+.agLista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.agCard {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 12px;
+  transition: all var(--transition-base);
+  animation: fadeIn 0.3s ease;
+}
+
+.agCard:hover {
+  border-color: rgba(99, 102, 241, 0.25);
+  box-shadow: 0 8px 24px -8px rgba(99, 102, 241, 0.20);
+  transform: translateY(-1px);
+  background: #fff;
+}
+
+.agHoraCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 48px;
+  padding-top: 2px;
+  color: var(--text-secondary);
+}
+
+.agHoraText {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+}
+
+.agStatusDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.agBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  min-width: 0;
+}
+
+.agTop {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.agAvatar {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-gradient-soft);
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+  flex-shrink: 0;
+  font-family: var(--font-display);
+}
+
+.agMeta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.agNome {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+.agDetalhe {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.agRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.agValor {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: var(--font-display);
+}
+
+.agAcoes {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.btnEditar,
+.btnExcluir {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  border: 1px solid transparent;
+}
+
+.btnEditar {
+  background: var(--accent-gradient-soft);
+  border-color: rgba(99, 102, 241, 0.18);
+  color: var(--accent-primary);
+}
+
+.btnEditar:hover {
+  background: rgba(99, 102, 241, 0.14);
+  border-color: rgba(99, 102, 241, 0.32);
+  transform: translateY(-1px);
+}
+
+.btnExcluir {
+  background: transparent;
+  color: var(--text-tertiary);
+}
+
+.btnExcluir:hover {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  border-color: rgba(239, 68, 68, 0.22);
+}
+
+/* ─── Modal Editar ─── */
+
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.editHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.editHeader .agAvatar {
+  width: 44px;
+  height: 44px;
+  font-size: 0.78rem;
+  background: var(--accent-gradient);
+  color: #fff;
+  border: none;
+  box-shadow: 0 6px 14px -4px rgba(168, 85, 247, 0.4);
+}
+
+.editHeader .agNome {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.editHeader .agDetalhe { font-size: 0.85rem; }
+
+.editGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.editField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.editLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.editInput {
+  padding: 0.72rem 0.95rem;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(15, 23, 42, 0.10);
+  border-radius: 11px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), background var(--transition-base);
+  font-family: inherit;
+  width: 100%;
+}
+
+.editInput:focus {
+  border-color: var(--accent-primary-light);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.14);
+}
+
+.editInput option { background: #fff; color: var(--text-primary); }
+
+.editTextarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.editAcoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.btnSecundario {
+  padding: 0.65rem 1.2rem;
+  background: var(--bg-tertiary);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btnSecundario:hover {
+  border-color: var(--accent-primary-light);
+  color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.btnPrimario {
+  padding: 0.65rem 1.4rem;
+  background: var(--accent-gradient);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 16px -4px rgba(168, 85, 247, 0.42);
+  transition: all var(--transition-base);
+}
+
+.btnPrimario:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px -6px rgba(236, 72, 153, 0.5);
+  filter: brightness(1.05);
+}
+
+/* ─── Modal Excluir ─── */
+
+.excluirForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.excluirTexto {
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.excluirAviso {
+  font-size: 0.85rem;
+  color: var(--color-danger);
+  font-weight: 600;
+  background: var(--color-danger-bg);
+  border: 1px solid rgba(239, 68, 68, 0.22);
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+}
+
+.btnPerigo {
+  padding: 0.65rem 1.4rem;
+  background: var(--color-danger);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 16px -4px rgba(239, 68, 68, 0.4);
+  transition: all var(--transition-base);
+}
+
+.btnPerigo:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px -6px rgba(239, 68, 68, 0.5);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .content { padding: var(--spacing-md); gap: var(--spacing-md); }
+  .diaCell { min-height: 48px; padding: 0.4rem 0.15rem; }
+  .diaNum { font-size: 0.85rem; }
+  .editGrid { grid-template-columns: 1fr; }
+  .agTop { flex-wrap: wrap; }
+  .agRight { flex-direction: row; align-items: center; }
+}
+
+@media (max-width: 480px) {
+  .diaHeader { font-size: 0.62rem; padding: 0.35rem 0; }
+  .diaCell { min-height: 40px; }
+  .diaNum { font-size: 0.78rem; }
+  .dot { width: 5px; height: 5px; }
+  .agHoraCol { min-width: 40px; }
+  .agCard { gap: var(--spacing-sm); padding: var(--spacing-sm); }
+}

@@ -6,11 +6,13 @@ import { Calendar, Clock, MapPin, X } from 'lucide-react';
 import { getAgendamentosByCliente, getEstabelecimentoById } from '@/data/mock';
 import { Agendamento } from '@/types';
 import StatusBadge from '@/components/StatusBadge/StatusBadge';
+import Modal from '@/components/Modal/Modal';
 import styles from './meusagendamentos.module.css';
 
 export default function MeusAgendamentosPage() {
   const [clienteId, setClienteId] = useState('');
   const [lista, setLista] = useState<Agendamento[]>([]);
+  const [cancelandoId, setCancelandoId] = useState<string | null>(null);
 
   useEffect(() => {
     const data = sessionStorage.getItem('clienteLogado');
@@ -27,8 +29,10 @@ export default function MeusAgendamentosPage() {
     }
   }, []);
 
-  const cancelar = (id: string) => {
-    setLista((prev) => prev.map((a) => a.id === id ? { ...a, status: 'cancelado' as const } : a));
+  const cancelar = () => {
+    if (!cancelandoId) return;
+    setLista((prev) => prev.map((a) => a.id === cancelandoId ? { ...a, status: 'cancelado' as const } : a));
+    setCancelandoId(null);
   };
 
   const proximos = useMemo(() => lista.filter((a) => a.status === 'confirmado' || a.status === 'pendente'), [lista]);
@@ -68,7 +72,7 @@ export default function MeusAgendamentosPage() {
                   </div>
                   <div className={styles.cardFooter}>
                     <span className={styles.cardPreco}>R$ {ag.servico.preco.toFixed(2)}</span>
-                    <button className={styles.btnCancelar} onClick={() => cancelar(ag.id)} type="button">
+                    <button className={styles.btnCancelar} onClick={() => setCancelandoId(ag.id)} type="button">
                       <X size={14} /> Cancelar
                     </button>
                   </div>
@@ -108,6 +112,18 @@ export default function MeusAgendamentosPage() {
           </div>
         )}
       </section>
+      <Modal aberto={!!cancelandoId} onFechar={() => setCancelandoId(null)} titulo="Cancelar Agendamento" largura="sm">
+        <div className={styles.excluirForm}>
+          <p className={styles.excluirTexto}>
+            Tem certeza que deseja cancelar este agendamento?
+          </p>
+          <p className={styles.excluirAviso}>Esta ação não pode ser desfeita.</p>
+          <div className={styles.confirmAcoes}>
+            <button type="button" className={styles.btnSecundario} onClick={() => setCancelandoId(null)}>Voltar</button>
+            <button type="button" className={styles.btnPerigo} onClick={cancelar}>Confirmar Cancelamento</button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

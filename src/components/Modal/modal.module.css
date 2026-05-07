@@ -4,8 +4,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,37 +21,41 @@
 }
 
 .modal {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 20px;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
-  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: var(--shadow-lg);
+  animation: scaleIn 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 30px 80px -16px rgba(99, 102, 241, 0.30);
 }
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  from { opacity: 0; transform: scale(0.95) translateY(15px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-.sm { width: 400px; max-width: 100%; }
-.md { width: 540px; max-width: 100%; }
-.lg { width: 700px; max-width: 100%; }
+.sm { width: 420px; max-width: 100%; }
+.md { width: 560px; max-width: 100%; }
+.lg { width: 720px; max-width: 100%; }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-lg) var(--spacing-xl);
-  border-bottom: 1px solid var(--border-subtle);
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
 }
 
 .titulo {
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 1.12rem;
+  font-weight: 800;
   color: var(--text-primary);
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
 }
 
 .closeBtn {
@@ -59,15 +64,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-sm);
+  border-radius: 10px;
   color: var(--text-secondary);
-  transition: all var(--transition-base);
+  background: var(--bg-tertiary);
+  transition: color var(--transition-base), background var(--transition-base);
   cursor: pointer;
 }
 
 .closeBtn:hover {
-  color: var(--text-primary);
-  background: var(--bg-tertiary);
+  color: var(--color-danger);
+  background: var(--color-danger-bg);
 }
 
 .body {

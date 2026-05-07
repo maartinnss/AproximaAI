@@ -9,11 +9,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
 }
 
 .count {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+  font-size: 0.82rem;
+  color: var(--accent-primary);
+  font-weight: 600;
+  padding: 0.4rem 0.95rem;
+  background: var(--accent-gradient-soft);
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  border-radius: 100px;
+  display: inline-block;
 }
 
 /* ─── Grid de Cards ─── */
@@ -25,55 +33,77 @@
 }
 
 .card {
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 16px;
   padding: var(--spacing-lg);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
   transition: all var(--transition-base);
-  animation: slideInUp 0.4s ease both;
+  animation: slideInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  box-shadow: 0 4px 16px -4px rgba(99, 102, 241, 0.10);
+  position: relative;
+  overflow: hidden;
 }
 
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent-gradient);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.card:hover::before { opacity: 1; }
+
 .card:hover {
-  border-color: var(--border-accent);
-  box-shadow: var(--shadow-glow);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  border-color: rgba(99, 102, 241, 0.25);
+  box-shadow: 0 16px 36px -10px rgba(99, 102, 241, 0.25);
 }
 
 .cardHeader {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: var(--spacing-sm);
 }
 
 .cardNome {
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 1.08rem;
+  font-weight: 800;
   color: var(--text-primary);
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .cardActions {
   display: flex;
-  gap: 4px;
+  gap: 5px;
 }
 
 .actionBtn {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-sm);
-  color: var(--text-secondary);
+  border-radius: 9px;
+  color: var(--text-tertiary);
+  background: var(--bg-tertiary);
   transition: all var(--transition-base);
   cursor: pointer;
 }
 
 .actionBtn:hover {
-  color: var(--text-primary);
+  color: var(--accent-primary);
   background: var(--bg-hover);
 }
 
@@ -83,33 +113,35 @@
 }
 
 .cardDescricao {
-  font-size: 0.8rem;
+  font-size: 0.88rem;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.6;
   flex: 1;
 }
 
 .cardFooter {
   display: flex;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
   padding-top: var(--spacing-md);
-  border-top: 1px solid var(--border-subtle);
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+  flex-wrap: wrap;
 }
 
 .cardTag {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  padding: 4px 10px;
-  background: var(--bg-tertiary);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-subtle);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  padding: 5px 11px;
+  background: var(--accent-gradient-soft);
+  border-radius: 8px;
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  font-family: var(--font-display);
 }
 
-/* ─── Formulário no Modal ─── */
+/* ─── Form Modal ─── */
 
 .form {
   display: flex;
@@ -131,7 +163,7 @@
 
 .textarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: 90px;
 }
 
 .formActions {
@@ -139,7 +171,69 @@
   justify-content: flex-end;
   gap: var(--spacing-sm);
   padding-top: var(--spacing-md);
-  border-top: 1px solid var(--border-subtle);
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+
+/* ─── Modal Excluir ─── */
+
+.excluirForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.excluirTexto {
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.excluirAviso {
+  font-size: 0.85rem;
+  color: var(--color-danger);
+  font-weight: 600;
+  background: var(--color-danger-bg);
+  border: 1px solid rgba(239, 68, 68, 0.22);
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+}
+
+.btnSecundario {
+  padding: 0.65rem 1.2rem;
+  background: var(--bg-tertiary);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btnSecundario:hover {
+  border-color: var(--accent-primary-light);
+  color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.btnPerigo {
+  padding: 0.65rem 1.4rem;
+  background: var(--color-danger);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 16px -4px rgba(239, 68, 68, 0.4);
+  transition: all var(--transition-base);
+}
+
+.btnPerigo:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px -6px rgba(239, 68, 68, 0.5);
 }
 
 @media (max-width: 640px) {

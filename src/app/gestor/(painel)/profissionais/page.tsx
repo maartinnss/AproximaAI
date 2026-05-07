@@ -12,6 +12,7 @@ export default function ProfissionaisPage() {
   const [profissionaisList, setProfissionaisList] = useState<Profissional[]>([]);
   const [modalAberto, setModalAberto] = useState(false);
   const [editando, setEditando] = useState<Profissional | null>(null);
+  const [excluindo, setExcluindo] = useState<Profissional | null>(null);
   const [estabelecimentoId, setEstabelecimentoId] = useState('');
 
   useEffect(() => {
@@ -73,8 +74,10 @@ export default function ProfissionaisPage() {
     setModalAberto(false);
   };
 
-  const excluir = (id: string) => {
-    setProfissionaisList((prev) => prev.filter((p) => p.id !== id));
+  const excluir = () => {
+    if (!excluindo) return;
+    setProfissionaisList((prev) => prev.filter((p) => p.id !== excluindo.id));
+    setExcluindo(null);
   };
 
   const toggleAtivo = (id: string) => {
@@ -122,7 +125,7 @@ export default function ProfissionaisPage() {
                   </button>
                   <button
                     className={`${styles.actionBtn} ${styles.deleteBtn}`}
-                    onClick={() => excluir(prof.id)}
+                    onClick={() => setExcluindo(prof)}
                     aria-label={`Excluir ${prof.nome}`}
                   >
                     <Trash2 size={15} />
@@ -160,6 +163,22 @@ export default function ProfissionaisPage() {
           ))}
         </div>
       </div>
+
+      {/* Modal de Confirmação de Exclusão */}
+      <Modal aberto={!!excluindo} onFechar={() => setExcluindo(null)} titulo="Excluir Profissional" largura="sm">
+        {excluindo && (
+          <div className={styles.excluirForm}>
+            <p className={styles.excluirTexto}>
+              Tem certeza que deseja excluir o profissional <strong>{excluindo.nome}</strong>?
+            </p>
+            <p className={styles.excluirAviso}>Esta ação não pode ser desfeita.</p>
+            <div className={styles.formActions}>
+              <button type="button" className={styles.btnSecundario} onClick={() => setExcluindo(null)}>Cancelar</button>
+              <button type="button" className={styles.btnPerigo} onClick={excluir}>Excluir</button>
+            </div>
+          </div>
+        )}
+      </Modal>
 
       {/* Modal de Cadastro/Edição */}
       <Modal

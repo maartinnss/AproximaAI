@@ -18,7 +18,7 @@ export default function AgendamentosPage() {
   const [estabelecimentoId, setEstabelecimentoId] = useState('');
   const [agendamentosList, setAgendamentosList] = useState<Agendamento[]>([]);
   const [profissionaisList, setProfissionaisList] = useState<Profissional[]>([]);
-  const [cancelando, setCancelando] = useState(false);
+  const [modalDesmarcar, setModalDesmarcar] = useState(false);
   const [motivo, setMotivo] = useState('');
 
   useEffect(() => {
@@ -49,23 +49,27 @@ export default function AgendamentosPage() {
 
   const abrirDetalhes = (ag: Agendamento) => {
     setAgendamentoSelecionado(ag);
-    setCancelando(false);
     setMotivo('');
     setModalAberto(true);
   };
 
+  const abrirDesmarcar = () => {
+    setMotivo('');
+    setModalAberto(false);
+    setModalDesmarcar(true);
+  };
+
   const confirmarCancelamento = () => {
     if (!motivo.trim()) return alert('Informe o motivo da desmarcação.');
-    
-    const novaLista = agendamentosList.map(a => 
-      a.id === agendamentoSelecionado?.id 
-        ? { ...a, status: 'cancelado' as StatusAgendamento, motivoCancelamento: motivo } 
+
+    const novaLista = agendamentosList.map(a =>
+      a.id === agendamentoSelecionado?.id
+        ? { ...a, status: 'cancelado' as StatusAgendamento, motivoCancelamento: motivo }
         : a
     );
     setAgendamentosList(novaLista);
-    
     setAgendamentoSelecionado(prev => prev ? { ...prev, status: 'cancelado', motivoCancelamento: motivo } : null);
-    setCancelando(false);
+    setModalDesmarcar(false);
   };
 
   return (
@@ -266,30 +270,43 @@ export default function AgendamentosPage() {
 
               {(agendamentoSelecionado.status === 'pendente' || agendamentoSelecionado.status === 'confirmado') && (
                 <div style={{ marginTop: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1rem' }}>
-                  {!cancelando ? (
-                    <button 
-                      onClick={() => setCancelando(true)}
-                      style={{ background: 'transparent', border: '1px solid #d63031', color: '#d63031', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem' }}
-                    >
-                      Desmarcar Atendimento
-                    </button>
-                  ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                      <label style={{ fontSize: '0.85rem', color: '#8b8b9e' }}>Motivo da desmarcação:</label>
-                      <textarea 
-                        value={motivo}
-                        onChange={(e) => setMotivo(e.target.value)}
-                        style={{ width: '100%', background: 'rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '0.5rem', borderRadius: '4px', minHeight: '60px', resize: 'vertical' }}
-                        placeholder="Ex: Profissional teve imprevisto..."
-                      />
-                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
-                        <button onClick={() => setCancelando(false)} style={{ background: 'transparent', color: '#8b8b9e', border: 'none', cursor: 'pointer', fontSize: '0.85rem' }}>Cancelar</button>
-                        <button onClick={confirmarCancelamento} style={{ background: '#d63031', color: '#fff', border: 'none', padding: '0.4rem 0.8rem', borderRadius: '4px', cursor: 'pointer', fontSize: '0.85rem' }}>Confirmar Desmarcação</button>
-                      </div>
-                    </div>
-                  )}
+                  <button className={styles.btnDesmarcar} onClick={abrirDesmarcar}>
+                    Desmarcar Atendimento
+                  </button>
                 </div>
               )}
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* Modal de Desmarcação */}
+      <Modal
+        aberto={modalDesmarcar}
+        onFechar={() => setModalDesmarcar(false)}
+        titulo="Desmarcar Atendimento"
+        largura="sm"
+      >
+        {agendamentoSelecionado && (
+          <div className={styles.desmarcarForm}>
+            <p className={styles.desmarcarTexto}>
+              Desmarcando atendimento de <strong>{agendamentoSelecionado.clienteNome}</strong> —{' '}
+              {agendamentoSelecionado.servico.nome} às {agendamentoSelecionado.hora}.
+            </p>
+            <div className={styles.desmarcarField}>
+              <label className={styles.desmarcarLabel}>Motivo da desmarcação</label>
+              <textarea
+                className={styles.desmarcarTextarea}
+                value={motivo}
+                onChange={(e) => setMotivo(e.target.value)}
+                placeholder="Ex: Profissional teve imprevisto..."
+                rows={3}
+              />
+            </div>
+            <p className={styles.desmarcarAviso}>Esta ação não pode ser desfeita.</p>
+            <div className={styles.desmarcarAcoes}>
+              <button type="button" className={styles.btnSecundario} onClick={() => setModalDesmarcar(false)}>Cancelar</button>
+              <button type="button" className={styles.btnPerigo} onClick={confirmarCancelamento}>Confirmar Desmarcação</button>
             </div>
           </div>
         )}

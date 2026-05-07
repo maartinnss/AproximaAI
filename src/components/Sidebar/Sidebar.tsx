@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
   CalendarDays,
+  CalendarCheck,
   Scissors,
   Users,
   LogOut,
@@ -18,6 +19,7 @@ import styles from './sidebar.module.css';
 const menuItems = [
   { href: '/gestor/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/gestor/agendamentos', label: 'Agendamentos', icon: CalendarDays },
+  { href: '/gestor/calendario', label: 'Calendário', icon: CalendarCheck },
   { href: '/gestor/servicos', label: 'Serviços', icon: Scissors },
   { href: '/gestor/profissionais', label: 'Profissionais', icon: Users },
 ];
