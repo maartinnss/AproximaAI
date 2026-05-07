@@ -1,0 +1,225 @@
+.content {
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.count {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* ─── Grid de Cards ─── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.card {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  transition: all var(--transition-base);
+  animation: slideInUp 0.4s ease both;
+}
+
+.card:hover {
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-2px);
+}
+
+.inativo {
+  opacity: 0.6;
+}
+
+.inativo:hover {
+  opacity: 0.85;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.avatarWrap {
+  position: relative;
+}
+
+.avatar {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  transition: all var(--transition-base);
+}
+
+.avatarAtivo {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border-color: var(--border-accent);
+  box-shadow: var(--shadow-sm);
+}
+
+.statusDot {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+  border: 3px solid var(--bg-card);
+}
+
+.online { background: var(--color-success); }
+.offline { background: var(--text-tertiary); }
+
+.cardActions {
+  display: flex;
+  gap: 4px;
+}
+
+.actionBtn {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  transition: all var(--transition-base);
+  cursor: pointer;
+}
+
+.actionBtn:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.deleteBtn:hover {
+  color: var(--color-danger) !important;
+  background: var(--color-danger-bg) !important;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cardNome {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.cardEspecialidade {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.cardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.cardFooter {
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.toggleBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  cursor: pointer;
+}
+
+.toggleAtivo {
+  color: var(--color-success);
+  background: var(--color-success-bg);
+}
+
+.toggleAtivo:hover {
+  background: rgba(0, 184, 148, 0.2);
+}
+
+.toggleInativo {
+  color: var(--text-tertiary);
+  background: var(--bg-tertiary);
+}
+
+.toggleInativo:hover {
+  color: var(--text-secondary);
+}
+
+/* ─── Formulário no Modal ─── */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-subtle);
+}
+
+@media (max-width: 640px) {
+  .content { padding: var(--spacing-md); gap: var(--spacing-md); }
+  .grid { grid-template-columns: 1fr; }
+  .fieldRow { grid-template-columns: 1fr; }
+}

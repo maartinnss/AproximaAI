@@ -2,16 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Zap, Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
-import {
-  credenciaisGestores,
-  credenciaisClientes,
-  getEstabelecimentoById,
-  getClienteById,
-} from '@/data/mock';
-import styles from './page.module.css';
+import Link from 'next/link';
+import { Zap, Mail, Lock, ArrowRight, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { credenciaisGestores, getEstabelecimentoById } from '@/data/mock';
+import styles from './login.module.css';
 
-export default function LoginPage() {
+export default function GestorLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -26,49 +22,23 @@ export default function LoginPage() {
 
     await new Promise((resolve) => setTimeout(resolve, 800));
 
-    // 1) Tenta autenticar como gestor
     const gestor = credenciaisGestores.find(
       (g) => g.email === email && g.senha === senha
     );
 
     if (gestor) {
       const est = getEstabelecimentoById(gestor.estabelecimentoId);
-      sessionStorage.setItem(
-        'gestorLogado',
-        JSON.stringify({
-          email: gestor.email,
-          nome: gestor.nomeGestor,
-          estabelecimentoId: gestor.estabelecimentoId,
-          nomeEstabelecimento: est?.nome || '',
-        })
-      );
+      sessionStorage.setItem('gestorLogado', JSON.stringify({
+        email: gestor.email,
+        nome: gestor.nomeGestor,
+        estabelecimentoId: gestor.estabelecimentoId,
+        nomeEstabelecimento: est?.nome || '',
+      }));
       router.push('/gestor/dashboard');
-      return;
+    } else {
+      setErro('E-mail ou senha incorretos.');
+      setCarregando(false);
     }
-
-    // 2) Tenta autenticar como cliente
-    const cred = credenciaisClientes.find(
-      (c) => c.email === email && c.senha === senha
-    );
-
-    if (cred) {
-      const cliente = getClienteById(cred.clienteId);
-      sessionStorage.setItem(
-        'clienteLogado',
-        JSON.stringify({
-          id: cred.clienteId,
-          nome: cliente?.nome || '',
-          email: cred.email,
-          avatar: cliente?.avatar || '',
-        })
-      );
-      router.push('/cliente/explorar');
-      return;
-    }
-
-    // 3) Nenhum match
-    setErro('E-mail ou senha incorretos.');
-    setCarregando(false);
   };
 
   return (
@@ -80,24 +50,25 @@ export default function LoginPage() {
 
       <div className={styles.container}>
         <div className={styles.card}>
+          <Link href="/" className={styles.backLink}>
+            <ArrowLeft size={16} />
+            <span>Voltar</span>
+          </Link>
+
           <div className={styles.header}>
             <div className={styles.logoIcon}>
-              <Zap size={32} />
+              <Zap size={28} />
             </div>
             <h1 className={styles.logoText}>
               <span>Fila</span>
               <span className={styles.logoAccent}>AI</span>
             </h1>
-            <p className={styles.subtitle}>
-              Agendamento inteligente para o seu negócio
-            </p>
+            <p className={styles.subtitle}>Acesse o painel do seu comércio</p>
           </div>
 
           <form className={styles.form} onSubmit={handleSubmit} id="login-form">
             <div className={styles.field}>
-              <label className={styles.label} htmlFor="login-email">
-                E-mail
-              </label>
+              <label className={styles.label} htmlFor="login-email">E-mail</label>
               <div className={styles.inputWrap}>
                 <Mail size={18} className={styles.inputIcon} />
                 <input
@@ -114,9 +85,7 @@ export default function LoginPage() {
             </div>
 
             <div className={styles.field}>
-              <label className={styles.label} htmlFor="login-senha">
-                Senha
-              </label>
+              <label className={styles.label} htmlFor="login-senha">Senha</label>
               <div className={styles.inputWrap}>
                 <Lock size={18} className={styles.inputIcon} />
                 <input
@@ -160,14 +129,10 @@ export default function LoginPage() {
           </form>
 
           <div className={styles.demoInfo}>
-            <p><strong>Demo — Gestor:</strong></p>
+            <p><strong>Demo — escolha um:</strong></p>
             <p>admin@barbearia.com / 123456</p>
             <p>admin@belezaearte.com / 123456</p>
             <p>admin@clinicavita.com / 123456</p>
-            <div className={styles.demoDivider} />
-            <p><strong>Demo — Cliente:</strong></p>
-            <p>joao@email.com / 123456</p>
-            <p>marcos@email.com / 123456</p>
           </div>
         </div>
       </div>

@@ -1,0 +1,316 @@
+.content {
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* ─── Filtros ─── */
+
+.filtros {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.searchWrap {
+  position: relative;
+  flex: 1;
+  min-width: 250px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.searchInput::placeholder { color: var(--text-tertiary); }
+.searchInput:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.15);
+}
+
+.filtrosRight {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.selectWrap {
+  position: relative;
+}
+
+.selectIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.select {
+  padding: 0.75rem 2.5rem 0.75rem 2.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  appearance: none;
+  transition: border-color var(--transition-base);
+  min-width: 180px;
+}
+
+.select:focus { border-color: var(--accent-primary); }
+
+.select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* ─── Contagem ─── */
+
+.contagem {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* ─── Tabela ─── */
+
+.tabelaSection {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  animation: fadeIn 0.4s ease;
+}
+
+.tabelaWrap {
+  overflow-x: auto;
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela thead th {
+  text-align: left;
+  padding: 0.85rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.row {
+  animation: fadeIn 0.3s ease both;
+  transition: background var(--transition-fast);
+}
+
+.row:hover { background: var(--bg-hover); }
+
+.tabela tbody td {
+  padding: 0.85rem 1rem;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.clienteCell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.clienteAvatar {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.clienteInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.clienteNome { font-weight: 500; }
+.clienteTel { font-size: 0.75rem; color: var(--text-secondary); }
+
+.dataCell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.valorCell {
+  font-weight: 600;
+  color: var(--color-success) !important;
+}
+
+.btnDetalhes {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  transition: all var(--transition-base);
+  cursor: pointer;
+}
+
+.btnDetalhes:hover {
+  color: var(--text-primary);
+  border-color: var(--border-accent);
+  background: var(--bg-hover);
+}
+
+/* ─── Modal Detalhes ─── */
+
+.detalhes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.detalheHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.detalheAvatar {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.detalheNome {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.detalheGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.detalheItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+.detalheItem > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detalheLabel {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detalheValor {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.detalheFooter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.detalheTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.detalheTotalValor {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-success);
+}
+
+.detalheObs {
+  padding: var(--spacing-md);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.detalheObs p {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  margin-top: 4px;
+}
+
+@media (max-width: 640px) {
+  .content { padding: var(--spacing-md); gap: var(--spacing-md); }
+  .filtros { flex-direction: column; align-items: stretch; }
+  .searchWrap { min-width: 100%; }
+  .filtrosRight { flex-direction: column; width: 100%; }
+  .select { min-width: 100%; width: 100%; }
+  .detalheGrid { grid-template-columns: 1fr; }
+}
