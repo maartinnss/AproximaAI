@@ -10,6 +10,7 @@ const statusConfig: Record<StatusAgendamento, { label: string; className: string
   pendente: { label: 'Pendente', className: 'pendente' },
   concluido: { label: 'Concluído', className: 'concluido' },
   cancelado: { label: 'Cancelado', className: 'cancelado' },
+  no_show: { label: 'Não compareceu', className: 'cancelado' },
 };
 
 export default function StatusBadge({ status }: StatusBadgeProps) {

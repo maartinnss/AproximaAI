@@ -2,14 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { Mail, Lock, ArrowRight, Eye, EyeOff, Sparkles } from 'lucide-react';
 import VennLogo from '@/components/VennLogo';
-import {
-  credenciaisGestores,
-  credenciaisClientes,
-  getEstabelecimentoById,
-  getClienteById,
-} from '@/data/mock';
 import styles from './page.module.css';
 
 export default function LoginPage() {
@@ -25,51 +20,20 @@ export default function LoginPage() {
     setErro('');
     setCarregando(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    const res = await signIn('gestor-credentials', {
+      email,
+      senha,
+      redirect: false,
+    });
 
-    // 1) Tenta autenticar como gestor
-    const gestor = credenciaisGestores.find(
-      (g) => g.email === email && g.senha === senha
-    );
-
-    if (gestor) {
-      const est = getEstabelecimentoById(gestor.estabelecimentoId);
-      sessionStorage.setItem(
-        'gestorLogado',
-        JSON.stringify({
-          email: gestor.email,
-          nome: gestor.nomeGestor,
-          estabelecimentoId: gestor.estabelecimentoId,
-          nomeEstabelecimento: est?.nome || '',
-        })
-      );
-      router.push('/gestor/dashboard');
+    if (res?.error) {
+      setErro('E-mail ou senha incorretos.');
+      setCarregando(false);
       return;
     }
 
-    // 2) Tenta autenticar como cliente
-    const cred = credenciaisClientes.find(
-      (c) => c.email === email && c.senha === senha
-    );
-
-    if (cred) {
-      const cliente = getClienteById(cred.clienteId);
-      sessionStorage.setItem(
-        'clienteLogado',
-        JSON.stringify({
-          id: cred.clienteId,
-          nome: cliente?.nome || '',
-          email: cred.email,
-          avatar: cliente?.avatar || '',
-        })
-      );
-      router.push('/cliente/explorar');
-      return;
-    }
-
-    // 3) Nenhum match
-    setErro('E-mail ou senha incorretos.');
-    setCarregando(false);
+    router.push('/gestor/dashboard');
+    router.refresh();
   };
 
   return (
@@ -88,7 +52,7 @@ export default function LoginPage() {
               <VennLogo size={44} />
             </div>
             <h1 className={styles.logoText}>
-              <span>Fila</span>
+              <span>Aproxima</span>
               <span className={styles.logoAccent}>AI</span>
             </h1>
             <p className={styles.subtitle}>
@@ -169,11 +133,6 @@ export default function LoginPage() {
                 <p>admin@barbearia.com / 123456</p>
                 <p>admin@belezaearte.com / 123456</p>
                 <p>admin@clinicavita.com / 123456</p>
-              </div>
-              <div className={styles.demoCol}>
-                <p><strong>Demo — Cliente</strong></p>
-                <p>joao@email.com / 123456</p>
-                <p>marcos@email.com / 123456</p>
               </div>
             </div>
           </div>

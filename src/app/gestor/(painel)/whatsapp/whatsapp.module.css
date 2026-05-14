@@ -1,0 +1,362 @@
+.content {
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  max-width: 760px;
+}
+
+/* ─── Card ─── */
+
+.card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 16px;
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  box-shadow: 0 4px 16px -4px rgba(99, 102, 241, 0.08);
+  position: relative;
+  overflow: hidden;
+  animation: slideInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--accent-gradient);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+.card:hover::before { opacity: 1; }
+
+/* ─── Card Header ─── */
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.iconWrap {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.iconOnline  { background: linear-gradient(135deg, #10B981, #059669); box-shadow: 0 6px 16px -4px rgba(16,185,129,0.40); }
+.iconOffline { background: linear-gradient(135deg, #94A3B8, #64748B); box-shadow: 0 6px 16px -4px rgba(100,116,139,0.30); }
+.iconMeta    { background: linear-gradient(135deg, #1877F2, #0C5DC1); box-shadow: 0 6px 16px -4px rgba(24,119,242,0.40); }
+.iconIA      { background: var(--accent-gradient); box-shadow: 0 6px 16px -4px rgba(168,85,247,0.40); }
+
+.cardTitleGroup { flex: 1; min-width: 0; }
+
+.cardTitulo {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.cardSubtitulo {
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* ─── Status Badge ─── */
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+}
+
+.badgeOnline {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.badgeOffline {
+  background: rgba(148, 163, 184, 0.12);
+  color: #64748B;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+/* ─── QR Code ─── */
+
+.qrcodeSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg) 0;
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.qrcodeImg {
+  width: 200px;
+  height: 200px;
+  border-radius: 12px;
+  border: 4px solid rgba(99, 102, 241, 0.12);
+  display: block;
+}
+
+.qrcodePlaceholder {
+  width: 200px;
+  height: 200px;
+  border-radius: 12px;
+  border: 2px dashed rgba(15, 23, 42, 0.14);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  color: var(--text-tertiary);
+  font-size: 0.82rem;
+}
+
+.qrcodeInstrucao {
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+  text-align: center;
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+/* ─── Webhook ─── */
+
+.webhookRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: var(--bg-tertiary);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  flex-wrap: wrap;
+}
+
+.webhookUrl {
+  flex: 1;
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  font-family: var(--font-mono, monospace);
+  word-break: break-all;
+  min-width: 0;
+}
+
+.copyBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  background: var(--accent-gradient-soft);
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  flex-shrink: 0;
+}
+
+.copyBtn:hover { filter: brightness(1.06); }
+
+.webhookHint {
+  font-size: 0.80rem;
+  color: var(--text-tertiary);
+  line-height: 1.6;
+}
+
+.webhookHint code {
+  font-family: var(--font-mono, monospace);
+  background: var(--bg-tertiary);
+  padding: 1px 5px;
+  border-radius: 5px;
+  font-size: 0.78rem;
+  color: var(--accent-primary);
+}
+
+/* ─── IA Body ─── */
+
+.iaBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.iaDesativado {
+  font-size: 0.83rem;
+  color: #92400E;
+  background: rgba(251, 191, 36, 0.10);
+  border: 1px solid rgba(251, 191, 36, 0.30);
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  font-weight: 500;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.fieldHint {
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  font-weight: 400;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.6;
+}
+
+.textarea:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.erroMsg {
+  font-size: 0.83rem;
+  color: var(--color-danger);
+  background: var(--color-danger-bg);
+  border: 1px solid rgba(239, 68, 68, 0.20);
+  border-radius: 8px;
+  padding: 0.55rem 0.9rem;
+}
+
+.sucessoMsg {
+  font-size: 0.83rem;
+  color: #059669;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  border-radius: 8px;
+  padding: 0.55rem 0.9rem;
+}
+
+/* ─── Card Footer ─── */
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  padding-top: var(--spacing-sm);
+}
+
+.btnSecundario {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.6rem 1.1rem;
+  background: var(--bg-tertiary);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btnSecundario:hover:not(:disabled) {
+  border-color: rgba(99, 102, 241, 0.25);
+  color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.btnSecundario:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.instanciaTag {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono, monospace);
+  background: var(--bg-tertiary);
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(15, 23, 42, 0.07);
+}
+
+/* ─── Toggle Switch ─── */
+
+.toggle {
+  position: relative;
+  display: inline-flex;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.toggleSlider {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.15);
+  border-radius: 100px;
+  transition: background var(--transition-base);
+}
+
+.toggleSlider::before {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  left: 3px; top: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform var(--transition-base);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+}
+
+.toggle input:checked + .toggleSlider {
+  background: var(--accent-primary);
+}
+
+.toggle input:checked + .toggleSlider::before {
+  transform: translateX(20px);
+}
+
+/* ─── Spinner ─── */
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinning {
+  animation: spin 0.8s linear infinite;
+}
+
+/* ─── Responsive ─── */
+
+@media (max-width: 640px) {
+  .content { padding: var(--spacing-md); gap: var(--spacing-md); }
+  .cardHeader { gap: var(--spacing-sm); }
+  .qrcodeImg { width: 170px; height: 170px; }
+}

@@ -49,7 +49,7 @@ export interface Servico {
 
 // ─── Agendamento ───
 
-export type StatusAgendamento = 'confirmado' | 'pendente' | 'concluido' | 'cancelado';
+export type StatusAgendamento = 'confirmado' | 'pendente' | 'concluido' | 'cancelado' | 'no_show';
 
 export interface Agendamento {
   id: string;

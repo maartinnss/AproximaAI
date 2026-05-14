@@ -1,15 +1,14 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   Bell, CalendarPlus, CalendarX2, Star, AlertTriangle,
   Trophy, UserMinus, Package, Info, CheckCheck, BellOff,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import styles from './notificationPanel.module.css';
-import { getNotificacoesByEstabelecimento } from '@/data/mock';
-import type { Notificacao } from '@/types';
+import type { NotificacaoView } from '@/server/repositories/_view-models';
 
-// Mapeamento de ícones Lucide pelo nome salvo no mock
 const iconMap: Record<string, React.ComponentType<{ size?: number }>> = {
   CalendarPlus, CalendarX: CalendarX2, Star, AlertTriangle,
   Trophy, UserMinus, Package, Info,
@@ -26,30 +25,72 @@ function timeAgo(dateStr: string): string {
   return `${days}d atrás`;
 }
 
-export default function NotificationPanel() {
+interface Props {
+  notificacoes: NotificacaoView[];
+}
+
+export default function NotificationPanel({ notificacoes: initial }: Props) {
   const [aberto, setAberto] = useState(false);
-  const [notificacoes, setNotificacoes] = useState<Notificacao[]>([]);
+  const [notificacoes, setNotificacoes] = useState<NotificacaoView[]>(initial);
 
   useEffect(() => {
-    const data = sessionStorage.getItem('gestorLogado');
-    if (data) {
-      const g = JSON.parse(data);
-      const lista = getNotificacoesByEstabelecimento(g.estabelecimentoId);
-      setNotificacoes(lista);
-    }
+    const es = new EventSource('/api/gestor/notificacoes/stream');
+    es.addEventListener('notificacao', (ev) => {
+      try {
+        const novo: NotificacaoView = JSON.parse((ev as MessageEvent).data);
+        setNotificacoes((prev) => {
+          if (prev.some((n) => n.id === novo.id)) return prev;
+          return [novo, ...prev];
+        });
+      } catch {
+        // ignore
+      }
+    });
+    es.onerror = () => {
+      // Auto-reconnect by browser; nothing to do.
+    };
+    return () => es.close();
   }, []);
 
   const naoLidas = notificacoes.filter((n) => !n.lida).length;
 
-  const marcarComoLida = useCallback((id: string) => {
-    setNotificacoes((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, lida: true } : n))
-    );
+  const marcarComoLida = useCallback(async (id: string) => {
+    setNotificacoes((prev) => prev.map((n) => (n.id === id ? { ...n, lida: true } : n)));
+    
+    try {
+      const res = await fetch('/api/gestor/notificacoes/marcar-lida', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      if (!res.ok) throw new Error('Falha da API');
+    } catch (err) {
+      console.error('Falha ao marcar como lida', err);
+      // Reversão pontual e segura do ID afetado, sem depender de "estadoAnterior"
+      setNotificacoes((prev) => prev.map((n) => (n.id === id ? { ...n, lida: false } : n)));
+      toast.error('Não foi possível marcar a notificação como lida. Tente novamente.');
+    }
   }, []);
 
-  const marcarTodasComoLidas = useCallback(() => {
+  const marcarTodasComoLidas = useCallback(async () => {
+    const idsNaoLidos = notificacoes.filter((n) => !n.lida).map((n) => n.id);
+    if (idsNaoLidos.length === 0) return;
+
     setNotificacoes((prev) => prev.map((n) => ({ ...n, lida: true })));
-  }, []);
+    
+    try {
+      const res = await fetch('/api/gestor/notificacoes/marcar-todas-lidas', {
+        method: 'POST',
+      });
+      if (!res.ok) throw new Error('Falha da API');
+    } catch (err) {
+      console.error('Falha ao marcar todas como lidas', err);
+      setNotificacoes((prev) => 
+        prev.map((n) => (idsNaoLidos.includes(n.id) ? { ...n, lida: false } : n))
+      );
+      toast.error('Não foi possível atualizar as notificações. Tente novamente mais tarde.');
+    }
+  }, [notificacoes]);
 
   const togglePanel = useCallback(() => setAberto((prev) => !prev), []);
 
@@ -62,7 +103,6 @@ export default function NotificationPanel() {
 
   return (
     <div className={styles.wrapper}>
-      {/* Botão do sininho */}
       <button
         className={`${styles.bellBtn} ${aberto ? styles.bellBtnActive : ''}`}
         onClick={togglePanel}
@@ -76,13 +116,10 @@ export default function NotificationPanel() {
         )}
       </button>
 
-      {/* Overlay (click outside) */}
       {aberto && <div className={styles.overlay} onClick={() => setAberto(false)} />}
 
-      {/* Painel dropdown */}
       {aberto && (
         <div className={styles.panel} role="region" aria-label="Painel de notificações">
-          {/* Header */}
           <div className={styles.panelHeader}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <span className={styles.panelTitle}>Notificações</span>
@@ -96,7 +133,6 @@ export default function NotificationPanel() {
             )}
           </div>
 
-          {/* Body */}
           <div className={styles.panelBody}>
             {notificacoes.length === 0 ? (
               <div className={styles.emptyState}>

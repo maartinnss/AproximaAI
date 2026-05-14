@@ -3,12 +3,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import {
   LayoutDashboard,
   CalendarDays,
   CalendarCheck,
   Scissors,
   Users,
+  MessageCircle,
   LogOut,
   Menu,
   X,
@@ -22,11 +24,19 @@ const menuItems = [
   { href: '/gestor/calendario', label: 'Calendário', icon: CalendarCheck },
   { href: '/gestor/servicos', label: 'Serviços', icon: Scissors },
   { href: '/gestor/profissionais', label: 'Profissionais', icon: Users },
+  { href: '/gestor/whatsapp', label: 'WhatsApp & IA', icon: MessageCircle },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
   const [aberta, setAberta] = useState(false);
+  const [saindo, setSaindo] = useState(false);
+
+  const handleSair = async () => {
+    if (saindo) return;
+    setSaindo(true);
+    await signOut({ callbackUrl: '/' });
+  };
 
   return (
     <>
@@ -81,10 +91,16 @@ export default function Sidebar() {
         </nav>
 
         <div className={styles.footer}>
-          <Link href="/" className={styles.logoutBtn} onClick={() => { sessionStorage.removeItem('gestorLogado'); }}>
+          <button
+            type="button"
+            className={styles.logoutBtn}
+            onClick={handleSair}
+            disabled={saindo}
+            style={{ opacity: saindo ? 0.6 : 1, cursor: saindo ? 'wait' : 'pointer' }}
+          >
             <LogOut size={18} />
-            <span>Sair</span>
-          </Link>
+            <span>{saindo ? 'Saindo...' : 'Sair'}</span>
+          </button>
         </div>
       </aside>
     </>
