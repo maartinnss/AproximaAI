@@ -1,0 +1,475 @@
+// AproximaAI — schema multi-tenant
+// Stack: Postgres + Prisma 7
+// Convenções:
+//   - IDs: uuid v4 ou v5 (seed determinístico)
+//   - Timestamps: timestamptz, sempre UTC
+//   - Dinheiro: int (centavos)
+//   - Soft delete: deleted_at (apenas onde necessário)
+//   - Multi-tenant: estabelecimento_id obrigatório nas tabelas operacionais
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ───
+
+enum CategoriaEstabelecimento {
+  barbearia
+  salao
+  clinica
+  estetica
+  outro
+}
+
+enum StatusAgendamento {
+  pendente
+  confirmado
+  concluido
+  cancelado
+  no_show
+}
+
+enum OrigemAgendamento {
+  web
+  whatsapp
+  gestor
+  api
+}
+
+enum CanceladoPor {
+  cliente
+  gestor
+  sistema
+}
+
+enum OrigemCliente {
+  web
+  whatsapp
+  manual
+}
+
+enum RoleGestor {
+  owner
+  staff
+}
+
+enum TipoNotificacao {
+  info
+  sucesso
+  alerta
+  aviso
+}
+
+enum StatusWaSession {
+  ativa
+  aguardando_humano
+  encerrada
+}
+
+enum DirecaoMensagem {
+  in
+  out
+}
+
+enum TipoMensagem {
+  text
+  template
+  interactive
+  audio
+  image
+  system
+}
+
+enum CategoriaTemplate {
+  utility
+  marketing
+  authentication
+}
+
+enum StatusTemplate {
+  approved
+  pending
+  rejected
+}
+
+enum StatusAssinatura {
+  trialing
+  active
+  past_due
+  canceled
+  incomplete
+  unpaid
+}
+
+// ─── Estabelecimento ───
+
+model Estabelecimento {
+  id           String                   @id @default(uuid()) @db.Uuid
+  slug         String                   @unique
+  nome         String
+  descricao    String                   @db.Text
+  endereco     String
+  telefone     String
+  email        String
+  categoria    CategoriaEstabelecimento
+
+  horarioFuncionamento Json @map("horario_funcionamento")
+  // { abertura: "09:00", fechamento: "20:00", diasSemana: [1,2,3,4,5,6] }
+
+  logoUrl String? @map("logo_url")
+
+  // i18n
+  locale   String @default("pt-BR")
+  currency String @default("BRL")
+  timezone String @default("America/Sao_Paulo")
+
+  // WhatsApp — Meta Cloud API
+  whatsappPhoneNumberId String? @unique @map("whatsapp_phone_number_id")
+  whatsappDisplayPhone  String? @map("whatsapp_display_phone")
+
+  // WhatsApp — Evolution API (Baileys, QR-code flow); slug-based instance name
+  evolutionInstanceName String? @unique @map("evolution_instance_name")
+
+  // IA
+  aiEnabled Boolean @default(true) @map("ai_enabled")
+  aiPersona String? @db.Text @map("ai_persona")
+  maxMsgsDia Int    @default(1000) @map("max_msgs_dia")
+
+  // Política de cancelamento
+  janelaCancelamentoHoras Int @default(2) @map("janela_cancelamento_horas")
+
+  notaMedia       Decimal @default(0) @db.Decimal(2, 1) @map("nota_media")
+  totalAvaliacoes Int     @default(0) @map("total_avaliacoes")
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  profissionais  Profissional[]
+  servicos       Servico[]
+  agendamentos   Agendamento[]
+  avaliacoes     Avaliacao[]
+  notificacoes   Notificacao[]
+  gestores       UsuarioGestor[]
+  waSessions     WaSession[]
+  assinatura     Assinatura?
+
+  @@index([categoria])
+  @@index([slug])
+  @@map("estabelecimento")
+}
+
+// ─── Profissional ───
+
+model Profissional {
+  id                String  @id @default(uuid()) @db.Uuid
+  estabelecimentoId String  @map("estabelecimento_id") @db.Uuid
+  nome              String
+  especialidade     String
+  telefone          String
+  email             String
+  avatarUrl         String? @map("avatar_url")
+  ativo             Boolean    @default(true)
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  estabelecimento Estabelecimento       @relation(fields: [estabelecimentoId], references: [id], onDelete: Cascade)
+  servicos        ProfissionalServico[]
+  agendamentos    Agendamento[]
+
+  @@index([estabelecimentoId, ativo])
+  @@map("profissional")
+}
+
+// ─── Serviço ───
+
+model Servico {
+  id                String  @id @default(uuid()) @db.Uuid
+  estabelecimentoId String  @map("estabelecimento_id") @db.Uuid
+  nome              String
+  descricao         String  @db.Text
+  precoCentavos     Int     @map("preco_centavos")
+  duracaoMinutos    Int     @map("duracao_minutos")
+  ativo             Boolean    @default(true)
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  estabelecimento Estabelecimento       @relation(fields: [estabelecimentoId], references: [id], onDelete: Cascade)
+  profissionais   ProfissionalServico[]
+  agendamentos    Agendamento[]
+
+  @@index([estabelecimentoId, ativo])
+  @@map("servico")
+}
+
+// ─── Profissional × Serviço (N:N) ───
+
+model ProfissionalServico {
+  profissionalId String @map("profissional_id") @db.Uuid
+  servicoId      String @map("servico_id") @db.Uuid
+
+  profissional Profissional @relation(fields: [profissionalId], references: [id], onDelete: Cascade)
+  servico      Servico      @relation(fields: [servicoId], references: [id], onDelete: Cascade)
+
+  @@id([profissionalId, servicoId])
+  @@map("profissional_servico")
+}
+
+// ─── Cliente (canônico — web + whatsapp) ───
+
+model Cliente {
+  id           String        @id @default(uuid()) @db.Uuid
+  nome         String?
+  email        String?
+  telefoneE164 String        @unique @map("telefone_e164")
+  avatarUrl    String?       @map("avatar_url")
+  origem       OrigemCliente
+  locale       String        @default("pt-BR")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  agendamentos Agendamento[]
+  avaliacoes   Avaliacao[]
+  contaWeb     UsuarioClienteWeb?
+  waSessions   WaSession[]
+
+  @@index([email])
+  @@map("cliente")
+}
+
+// ─── Credenciais (Auth.js) ───
+
+model UsuarioGestor {
+  id                String     @id @default(uuid()) @db.Uuid
+  estabelecimentoId String     @map("estabelecimento_id") @db.Uuid
+  nome              String
+  email             String     @unique
+  senhaHash         String     @map("senha_hash")
+  role              RoleGestor @default(owner)
+  emailVerificadoEm DateTime?  @map("email_verificado_em") @db.Timestamptz(6)
+  locale            String     @default("pt-BR")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  estabelecimento Estabelecimento @relation(fields: [estabelecimentoId], references: [id], onDelete: Cascade)
+
+  @@index([estabelecimentoId])
+  @@map("usuario_gestor")
+}
+
+model UsuarioClienteWeb {
+  id                String    @id @default(uuid()) @db.Uuid
+  clienteId         String    @unique @map("cliente_id") @db.Uuid
+  email             String    @unique
+  senhaHash         String    @map("senha_hash")
+  emailVerificadoEm DateTime? @map("email_verificado_em") @db.Timestamptz(6)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  cliente Cliente @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+
+  @@map("usuario_cliente_web")
+}
+
+// ─── Agendamento ───
+
+model Agendamento {
+  id                String            @id @default(uuid()) @db.Uuid
+  estabelecimentoId String            @map("estabelecimento_id") @db.Uuid
+  clienteId         String            @map("cliente_id") @db.Uuid
+  servicoId         String            @map("servico_id") @db.Uuid
+  profissionalId    String            @map("profissional_id") @db.Uuid
+
+  inicioEm DateTime @map("inicio_em") @db.Timestamptz(6)
+  fimEm    DateTime @map("fim_em") @db.Timestamptz(6)
+
+  status StatusAgendamento  @default(pendente)
+  origem OrigemAgendamento  @default(web)
+
+  // Snapshot pra histórico financeiro estável
+  precoCentavosSnapshot  Int @map("preco_centavos_snapshot")
+  duracaoMinutosSnapshot Int @map("duracao_minutos_snapshot")
+
+  observacoes         String?       @db.Text
+  motivoCancelamento  String?       @db.Text @map("motivo_cancelamento")
+  canceladoPor        CanceladoPor? @map("cancelado_por")
+  canceladoEm         DateTime?     @map("cancelado_em") @db.Timestamptz(6)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  estabelecimento Estabelecimento @relation(fields: [estabelecimentoId], references: [id], onDelete: Cascade)
+  cliente         Cliente         @relation(fields: [clienteId], references: [id])
+  servico         Servico         @relation(fields: [servicoId], references: [id])
+  profissional    Profissional    @relation(fields: [profissionalId], references: [id])
+  avaliacao       Avaliacao?
+
+  @@index([estabelecimentoId, inicioEm(sort: Desc)])
+  @@index([clienteId, inicioEm(sort: Desc)])
+  @@index([profissionalId, inicioEm])
+  @@index([status, inicioEm])
+  @@map("agendamento")
+}
+
+// ─── Avaliação ───
+
+model Avaliacao {
+  id                String   @id @default(uuid()) @db.Uuid
+  agendamentoId     String   @unique @map("agendamento_id") @db.Uuid
+  clienteId         String   @map("cliente_id") @db.Uuid
+  estabelecimentoId String   @map("estabelecimento_id") @db.Uuid
+  nota              Int      @db.SmallInt
+  comentario        String   @db.Text
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  agendamento     Agendamento     @relation(fields: [agendamentoId], references: [id], onDelete: Cascade)
+  cliente         Cliente         @relation(fields: [clienteId], references: [id])
+  estabelecimento Estabelecimento @relation(fields: [estabelecimentoId], references: [id], onDelete: Cascade)
+
+  @@index([estabelecimentoId, createdAt(sort: Desc)])
+  @@map("avaliacao")
+}
+
+// ─── Notificação (painel gestor) ───
+
+model Notificacao {
+  id                String          @id @default(uuid()) @db.Uuid
+  estabelecimentoId String          @map("estabelecimento_id") @db.Uuid
+  tipo              TipoNotificacao
+  titulo            String
+  mensagem          String          @db.Text
+  icone             String?
+  lida              Boolean            @default(false)
+  metadata          Json?
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  estabelecimento Estabelecimento @relation(fields: [estabelecimentoId], references: [id], onDelete: Cascade)
+
+  @@index([estabelecimentoId, lida, createdAt(sort: Desc)])
+  @@map("notificacao")
+}
+
+// ─── WhatsApp ───
+
+model WaSession {
+  id                String          @id @default(uuid()) @db.Uuid
+  clienteId         String          @map("cliente_id") @db.Uuid
+  estabelecimentoId String          @map("estabelecimento_id") @db.Uuid
+  waId              String          @map("wa_id")             // E.164 sem '+'
+  phoneNumberId     String          @map("phone_number_id")    // número receptor Meta
+  status            StatusWaSession @default(ativa)
+  contexto          Json?           @default("{}")
+  ultimaMensagemEm  DateTime?       @map("ultima_mensagem_em") @db.Timestamptz(6)
+  expiraEm          DateTime?       @map("expira_em") @db.Timestamptz(6)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  cliente         Cliente         @relation(fields: [clienteId], references: [id])
+  estabelecimento Estabelecimento @relation(fields: [estabelecimentoId], references: [id], onDelete: Cascade)
+  mensagens       WaMessage[]
+  acoes           AgenteAcaoLog[]
+
+  @@index([waId, phoneNumberId])
+  @@index([estabelecimentoId, status])
+  @@map("wa_session")
+}
+
+model WaMessage {
+  id            String          @id @default(uuid()) @db.Uuid
+  sessionId     String          @map("session_id") @db.Uuid
+  direcao       DirecaoMensagem
+  metaMessageId String          @unique @map("meta_message_id")
+  tipo          TipoMensagem
+  conteudo      Json
+  custoTokens   Int?            @map("custo_tokens")
+  modeloLlm     String?         @map("modelo_llm")
+  enviadaEm     DateTime        @map("enviada_em") @db.Timestamptz(6)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  session WaSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, enviadaEm(sort: Desc)])
+  @@map("wa_message")
+}
+
+model WaTemplate {
+  id          String            @id @default(uuid()) @db.Uuid
+  nome        String            @unique
+  idioma      String
+  categoria   CategoriaTemplate
+  status      StatusTemplate    @default(pending)
+  componentes Json
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("wa_template")
+}
+
+model AgenteAcaoLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  sessionId  String   @map("session_id") @db.Uuid
+  ferramenta String
+  argumentos Json
+  resultado  Json?
+  sucesso    Boolean
+  erro       String?  @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  session WaSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, createdAt(sort: Desc)])
+  @@map("agente_acao_log")
+}
+
+// ─── Idempotência ───
+
+model IdempotencyKey {
+  chave    String   @id
+  endpoint String
+  resposta Json?
+  expiraEm DateTime @map("expira_em") @db.Timestamptz(6)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([expiraEm])
+  @@map("idempotency_key")
+}
+
+// ─── Assinatura (Stripe) ───
+
+model Assinatura {
+  id                   String           @id @default(uuid()) @db.Uuid
+  estabelecimentoId    String           @unique @map("estabelecimento_id") @db.Uuid
+  stripeCustomerId     String?          @unique @map("stripe_customer_id")
+  stripeSubscriptionId String?          @unique @map("stripe_subscription_id")
+  status               StatusAssinatura @default(trialing)
+  plano                String           @default("trial")
+  periodoInicio        DateTime?        @map("periodo_inicio") @db.Timestamptz(6)
+  periodoFim           DateTime?        @map("periodo_fim") @db.Timestamptz(6)
+  trialFim             DateTime?        @map("trial_fim") @db.Timestamptz(6)
+  cancelaNoFimPeriodo  Boolean             @default(false) @map("cancela_no_fim_periodo")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  estabelecimento Estabelecimento @relation(fields: [estabelecimentoId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@map("assinatura")
+}
