@@ -10,6 +10,7 @@ import { verify } from "@node-rs/argon2";
 import { z } from "zod";
 
 import { db } from "../db/client";
+import { checkRateLimit } from "../lib/rate-limit";
 import { authConfig } from "./config";
 
 const credentialsSchema = z.object({
@@ -31,9 +32,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         email: { label: "Email", type: "email" },
         senha: { label: "Senha", type: "password" },
       },
-      async authorize(raw) {
+      async authorize(raw, request) {
         const parsed = credentialsSchema.safeParse(raw);
         if (!parsed.success) throw new InvalidCredentials();
+
+        const ip =
+          request?.headers?.get("cf-connecting-ip") ??
+          request?.headers?.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+          "unknown";
+        const rl = await checkRateLimit(`login:${ip}`, 10, 300_000);
+        if (!rl.ok) throw new InvalidCredentials();
 
         const user = await db.usuarioGestor.findUnique({
           where: { email: parsed.data.email },

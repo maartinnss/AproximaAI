@@ -25,7 +25,7 @@ export const authConfig = {
       return token;
     },
     session({ session, token }) {
-      session.user.id = token.sub!;
+      session.user.id = token.sub ?? "";
       session.user.role = token.role as AppRole;
       session.user.estabelecimentoId = token.estabelecimentoId as string | undefined;
       session.user.locale = token.locale as string | undefined;
@@ -43,6 +43,7 @@ export const authConfig = {
         pathname.startsWith("/gestor/servicos") ||
         pathname.startsWith("/gestor/notificacoes") ||
         pathname.startsWith("/gestor/whatsapp") ||
+        pathname.startsWith("/gestor/onboarding") ||
         pathname.startsWith("/api/gestor");
 
       if (protectedGestor) return role === "gestor";

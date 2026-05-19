@@ -136,7 +136,7 @@ model Estabelecimento {
 
   // IA
   aiEnabled Boolean @default(true) @map("ai_enabled")
-  aiPersona String? @db.Text @map("ai_persona")
+  aiPersona String? @db.VarChar(2000) @map("ai_persona")
   maxMsgsDia Int    @default(1000) @map("max_msgs_dia")
 
   // Política de cancelamento

@@ -1,0 +1,12 @@
+FROM atendai/evolution-api:latest
+
+WORKDIR /evolution
+
+# Atualiza Baileys para 6.7.18 (última versão CJS — 6.7.19+ é ESM, quebra o require do Evolution)
+# 6.7.18 inclui fix de handshake WS com protocolo atual do WhatsApp
+RUN apk add --no-cache git \
+    && npm install @whiskeysockets/baileys@6.7.18 --save --force \
+    && rm -rf /evolution/node_modules/baileys \
+    && cp -r /evolution/node_modules/@whiskeysockets/baileys /evolution/node_modules/baileys \
+    && node -e "console.log('baileys:', require('./node_modules/baileys/package.json').version)" \
+    && apk del git

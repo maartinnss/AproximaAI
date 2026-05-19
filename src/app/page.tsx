@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { Mail, Lock, ArrowRight, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import VennLogo from '@/components/VennLogo';
 import styles from './page.module.css';
 
@@ -126,25 +126,26 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className={styles.demoInfo}>
-            <div className={styles.demoGrid}>
-              <div className={styles.demoCol}>
-                <p><strong>Demo — Gestor</strong></p>
-                <p>admin@barbearia.com / 123456</p>
-                <p>admin@belezaearte.com / 123456</p>
-                <p>admin@clinicavita.com / 123456</p>
+          {process.env.NODE_ENV !== 'production' && (
+            <div className={styles.demoInfo}>
+              <div className={styles.demoGrid}>
+                <div className={styles.demoCol}>
+                  <p><strong>Demo — Gestor</strong></p>
+                  <p>admin@barbearia.com / 123456</p>
+                  <p>admin@belezaearte.com / 123456</p>
+                  <p>admin@clinicavita.com / 123456</p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           <div className={styles.cardFooter}>
             <button
               type="button"
               className={styles.toLanding}
-              onClick={() => router.push('/landing')}
+              onClick={() => router.push('/registro')}
             >
-              <Sparkles size={14} />
-              Conhecer o AproximaAI
+              Criar conta gratuita
             </button>
           </div>
         </div>

@@ -8,7 +8,12 @@ export default async function WhatsappPage() {
   const ctx = await requireGestor();
   const est = await db.estabelecimento.findFirst({
     where: { id: ctx.estabelecimentoId },
-    select: { aiEnabled: true, aiPersona: true, whatsappPhoneNumberId: true },
+    select: {
+      aiEnabled: true,
+      aiPersona: true,
+      whatsappPhoneNumberId: true,
+      whatsappDisplayPhone: true,
+    },
   });
 
   return (
@@ -18,6 +23,8 @@ export default async function WhatsappPage() {
         aiEnabled={est?.aiEnabled ?? true}
         aiPersona={est?.aiPersona ?? null}
         webhookUrl={`${env.APP_URL}/api/webhook/whatsapp`}
+        metaPhoneNumberId={est?.whatsappPhoneNumberId ?? null}
+        metaDisplayPhone={est?.whatsappDisplayPhone ?? null}
       />
     </>
   );

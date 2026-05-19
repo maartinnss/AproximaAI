@@ -64,11 +64,13 @@ export const waSessionRepo = {
   },
 
   async updateContexto(id: string, contexto: WaSessionContexto): Promise<void> {
+    const MAX_MESSAGES = 40;
+    const mensagens = contexto.mensagens.slice(-MAX_MESSAGES);
     const expiraEm = new Date(Date.now() + 24 * 60 * 60 * 1000);
     await db.waSession.update({
       where: { id },
       data: {
-        contexto: contexto as object,
+        contexto: { mensagens } as object,
         ultimaMensagemEm: new Date(),
         expiraEm,
       },

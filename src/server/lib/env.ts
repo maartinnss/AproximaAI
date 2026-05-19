@@ -36,6 +36,10 @@ const schema = z.object({
 
   EVOLUTION_API_URL: z.string().url().optional(),
   EVOLUTION_API_KEY: z.string().optional(),
+  // Segredo separado para validar webhooks recebidos da Evolution.
+  // Se ausente, cai para EVOLUTION_API_KEY (retrocompatibilidade).
+  // Em produção nova, definir ambos com valores distintos.
+  EVOLUTION_WEBHOOK_SECRET: z.string().optional(),
 
   META_APP_ID: z.string().optional(),
   META_APP_SECRET: z.string().optional(),
@@ -87,10 +91,11 @@ export type Env = typeof env;
 // Startup warning: variáveis opcionais no schema mas críticas em produção.
 if (isProdRuntime) {
   const criticalInProd: Array<keyof Env> = [
-    "META_APP_SECRET",
-    "META_ACCESS_TOKEN",
-    "META_VERIFY_TOKEN",
     "REDIS_URL",
+    "EVOLUTION_API_URL",
+    "EVOLUTION_API_KEY",
+    "ANTHROPIC_API_KEY",
+    "OPENROUTER_API_KEY",
   ];
   const missing = criticalInProd.filter((k) => !env[k]);
   if (missing.length > 0) {

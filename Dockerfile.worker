@@ -1,0 +1,15 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Instala dependências separado do código fonte para cache eficiente.
+COPY package*.json ./
+RUN npm ci
+
+# Copia código fonte.
+COPY . .
+
+USER node
+
+# server-only-mock.cjs deve ser pré-criado (já existe no repo).
+CMD ["npm", "run", "worker:wa"]

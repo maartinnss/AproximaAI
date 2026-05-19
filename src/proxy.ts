@@ -22,6 +22,8 @@ export const config = {
     "/gestor/profissionais/:path*",
     "/gestor/servicos/:path*",
     "/gestor/notificacoes/:path*",
+    "/gestor/whatsapp/:path*",
+    "/gestor/onboarding/:path*",
     "/api/gestor/:path*",
   ],
 };

@@ -1,7 +1,9 @@
 import { timingSafeEqual } from "crypto";
 
 import { after } from "next/server";
+import { Prisma } from "@prisma/client";
 
+import { db } from "@/server/db/client";
 import { env, isProductionRuntime } from "@/server/lib/env";
 import { sendTextMessage } from "@/server/lib/evolution";
 import { logger } from "@/server/lib/logger";
@@ -27,7 +29,12 @@ const TEXTO_APENAS_TEXTO =
   "Por enquanto só consigo responder mensagens de texto. Tente me mandar uma mensagem escrita! 😊";
 
 async function dispatch(data: EvolutionPayload): Promise<void> {
-  if (data.event !== "messages.upsert") return;
+  if (data.event !== "messages.upsert") {
+    if (data.event) {
+      logger.debug({ event: data.event, instance: data.instance }, "[webhook/evolution] evento ignorado");
+    }
+    return;
+  }
   if (data.data?.key?.fromMe) return;
 
   const remoteJid = data.data?.key?.remoteJid ?? "";
@@ -40,6 +47,24 @@ async function dispatch(data: EvolutionPayload): Promise<void> {
   const timestamp = data.data?.messageTimestamp ?? Math.floor(Date.now() / 1000);
 
   if (!waId || !metaMessageId || !instanceName) return;
+
+  // Optimistic insert: if P2002 (unique violation), this event was already dispatched.
+  try {
+    await db.idempotencyKey.create({
+      data: {
+        chave: `webhook:evolution:${metaMessageId}`,
+        endpoint: "webhook/evolution",
+        expiraEm: new Date(Date.now() + 86_400_000),
+      },
+    });
+  } catch (err) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
+      logger.info({ metaMessageId }, "[webhook/evolution] replay detectado — ignorado");
+      return;
+    }
+    // DB unavailable — fall through, waMensagemService has its own dedup layer
+    logger.warn({ err }, "[webhook/evolution] idempotency check falhou — continuando");
+  }
 
   const texto =
     data.data?.message?.conversation ??
@@ -71,12 +96,13 @@ async function dispatch(data: EvolutionPayload): Promise<void> {
 export async function POST(req: Request): Promise<Response> {
   try {
     const apikeyHeader = req.headers.get("apikey") ?? "";
-    const expectedKey = env.EVOLUTION_API_KEY;
+    // Prefer EVOLUTION_WEBHOOK_SECRET (inbound-only secret); fall back to EVOLUTION_API_KEY.
+    const expectedKey = env.EVOLUTION_WEBHOOK_SECRET ?? env.EVOLUTION_API_KEY;
     if (!expectedKey) {
       if (isProductionRuntime) {
         return new Response("Forbidden", { status: 403 });
       }
-      logger.warn("[webhook/evolution] EVOLUTION_API_KEY não definido — validação ignorada (dev only)");
+      logger.warn("[webhook/evolution] EVOLUTION_WEBHOOK_SECRET/EVOLUTION_API_KEY não definido — validação ignorada (dev only)");
     } else {
       const headerBuf = Buffer.from(apikeyHeader, "utf8");
       const expectedBuf = Buffer.from(expectedKey, "utf8");
