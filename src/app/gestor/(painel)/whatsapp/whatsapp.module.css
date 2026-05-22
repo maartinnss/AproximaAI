@@ -54,6 +54,7 @@
 .iconOnline  { background: linear-gradient(135deg, #10B981, #059669); box-shadow: 0 6px 16px -4px rgba(16,185,129,0.40); }
 .iconOffline { background: linear-gradient(135deg, #94A3B8, #64748B); box-shadow: 0 6px 16px -4px rgba(100,116,139,0.30); }
 .iconMeta    { background: linear-gradient(135deg, #1877F2, #0C5DC1); box-shadow: 0 6px 16px -4px rgba(24,119,242,0.40); }
+.iconWa      { background: linear-gradient(135deg, #25D366, #128C7E); box-shadow: 0 6px 16px -4px rgba(37,211,102,0.40); }
 .iconIA      { background: var(--accent-gradient); box-shadow: 0 6px 16px -4px rgba(168,85,247,0.40); }
 
 .cardTitleGroup { flex: 1; min-width: 0; }
@@ -191,6 +192,21 @@
   border-radius: 5px;
   font-size: 0.78rem;
   color: var(--accent-primary);
+}
+
+/* ─── Telefone edit ─── */
+
+.telRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.telEditRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
 }
 
 /* ─── IA Body ─── */

@@ -18,6 +18,7 @@ const schema = z.object({
     .optional(),
   whatsappPhoneNumberId: z.string().max(40).nullable().optional(),
   whatsappDisplayPhone: z.string().max(30).nullable().optional(),
+  telefone: z.string().min(1).max(20).optional(),
 });
 
 export async function PATCH(req: Request) {
@@ -30,12 +31,14 @@ export async function PATCH(req: Request) {
     if (body.aiPersona !== undefined) data.aiPersona = body.aiPersona;
     if (body.whatsappPhoneNumberId !== undefined) data.whatsappPhoneNumberId = body.whatsappPhoneNumberId;
     if (body.whatsappDisplayPhone !== undefined) data.whatsappDisplayPhone = body.whatsappDisplayPhone;
+    if (body.telefone !== undefined) data.telefone = body.telefone;
 
     const select = {
       aiEnabled: true,
       aiPersona: true,
       whatsappPhoneNumberId: true,
       whatsappDisplayPhone: true,
+      telefone: true,
     };
 
     if (Object.keys(data).length === 0) {
