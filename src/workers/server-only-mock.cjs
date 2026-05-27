@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 // Intercepta o módulo 'server-only' antes de qualquer import.
 // No contexto do worker (Node.js puro, não Next.js), o guard não é necessário.
 const Module = require('module');

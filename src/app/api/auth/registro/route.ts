@@ -10,7 +10,6 @@ import type { Prisma } from "@prisma/client";
 class EmailDuplicado extends Error {}
 
 function slugify(str: string): string {
-  // eslint-disable-next-line no-misleading-character-class
   return str
     .normalize("NFD")
     .replace(/\p{Mn}/gu, "")

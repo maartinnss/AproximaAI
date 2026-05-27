@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
   Scissors, User, Phone, Mail, DollarSign, Clock, FileText,
@@ -67,7 +68,9 @@ export default function OnboardingClient() {
   // Poll connection state while on step 3
   useEffect(() => {
     if (step !== 3) return;
-    fetchQr();
+    const kickoff = setTimeout(() => {
+      void fetchQr();
+    }, 0);
     const id = setInterval(async () => {
       if (waConectado) return;
       try {
@@ -78,7 +81,10 @@ export default function OnboardingClient() {
         }
       } catch { /* silencia */ }
     }, 5000);
-    return () => clearInterval(id);
+    return () => {
+      clearTimeout(kickoff);
+      clearInterval(id);
+    };
   }, [step, fetchQr, waConectado]);
 
   const criarServico = async (e: React.FormEvent) => {
@@ -371,7 +377,7 @@ export default function OnboardingClient() {
                   </div>
                 ) : qrcode ? (
                   <div className={styles.qrBox}>
-                    <img src={qrcode} alt="QR Code WhatsApp" />
+                    <Image src={qrcode} alt="QR Code WhatsApp" width={260} height={260} unoptimized />
                   </div>
                 ) : (
                   <div className={styles.qrBox}>

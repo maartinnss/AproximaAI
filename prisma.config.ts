@@ -1,6 +1,6 @@
 import { config as loadEnv } from "dotenv";
 import { existsSync } from "node:fs";
-import { defineConfig, env } from "prisma/config";
+import { defineConfig } from "prisma/config";
 
 // Carrega .env.local primeiro (convenção Next.js), depois .env como fallback.
 // `dotenv` por padrão NÃO sobrescreve env vars já definidas no shell — então
