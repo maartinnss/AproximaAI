@@ -38,7 +38,8 @@ services:
     ports:
       - "8181:8080"
     environment:
-      SERVER_URL: http://localhost:8080
+      # URL pública do próprio Evolution (usada para callbacks internos)
+      SERVER_URL: http://localhost:8181
       AUTHENTICATION_API_KEY: evolution_dev_key
       DATABASE_ENABLED: "true"
       DATABASE_PROVIDER: postgresql
@@ -48,18 +49,22 @@ services:
       CACHE_REDIS_ENABLED: "true"
       CACHE_REDIS_URI: redis://redis:6379
       CACHE_REDIS_PREFIX_KEY: evo
-      CACHE_REDIS_SAVE_INSTANCES: "true"
+      CACHE_REDIS_SAVE_INSTANCES: "false"
       CACHE_REDIS_TTL: "604800"
-      CACHE_LOCAL_ENABLED: "false"
+      CACHE_LOCAL_ENABLED: "true"
+      WEBSOCKET_ENABLED: "true"
+      WEBSOCKET_GLOBAL_EVENTS: "false"
       WEBHOOK_GLOBAL_ENABLED: "true"
       # Linux: definir EVOLUTION_WEBHOOK_HOST=http://172.17.0.1:3000 no .env.local
       # Docker Desktop (Mac/Windows): host.docker.internal resolve automaticamente
       WEBHOOK_GLOBAL_URL: ${EVOLUTION_WEBHOOK_HOST:-http://host.docker.internal:3000}/api/webhook/evolution
       WEBHOOK_GLOBAL_WEBHOOK_BY_EVENTS: "false"
       WEBHOOK_EVENTS_MESSAGES_UPSERT: "true"
-      WEBHOOK_EVENTS_CONNECTION_UPDATE: "false"
-      WEBHOOK_EVENTS_QRCODE_UPDATED: "false"
-      LOG_LEVEL: DEBUG
+      WEBHOOK_EVENTS_CONNECTION_UPDATE: "true"
+      WEBHOOK_EVENTS_QRCODE_UPDATED: "true"
+      # Force latest Baileys WA version (container .env has stale 1015901307 hardcoded)
+      CONFIG_SESSION_PHONE_VERSION: "2.3000.1035194821"
+      LOG_LEVEL: ERROR
       LOG_COLOR: "false"
       LOG_BAILEYS: "error"
       DEL_INSTANCE: "false"

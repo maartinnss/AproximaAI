@@ -1,9 +1,12 @@
 'use client';
 
-import { useState } from 'react';
-import { MessageCircle, Bot, Copy, Check, Save, ExternalLink, Pencil, X } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
+import { MessageCircle, Bot, Copy, Check, Save, ExternalLink, Pencil, X, Wifi, WifiOff, RefreshCw, QrCode } from 'lucide-react';
 import { apiFetch, describeApiError } from '@/lib/api-client';
 import styles from './whatsapp.module.css';
+
+type EstadoConexao = 'loading' | 'conectado' | 'qrcode' | 'aguardando' | 'sem-evolution' | 'offline' | 'erro';
 
 function buildWaLink(telefone: string): string {
   const digits = telefone.replace(/\D/g, '');
@@ -33,6 +36,58 @@ export default function WhatsappClient({ telefone: initTelefone, aiEnabled: init
   const [salvandoTel, setSalvandoTel] = useState(false);
   const [erroTel, setErroTel] = useState('');
   const [copiado, setCopiado] = useState(false);
+
+  // ── Conexão Evolution QR ──
+  const [estadoConexao, setEstadoConexao] = useState<EstadoConexao>('loading');
+  const [qrcodeBase64, setQrcodeBase64] = useState<string | null>(null);
+  const [gerandoQr, setGerandoQr] = useState(false);
+  const [erroQr, setErroQr] = useState('');
+
+  const fetchConexao = useCallback(async () => {
+    try {
+      const data = await apiFetch<{
+        conectado: boolean;
+        estado: string;
+        qrcode?: { base64?: string };
+        evolutionNaoConfigurado?: boolean;
+        evolutionIndisponivel?: boolean;
+        precisaReconectar?: boolean;
+      }>('/api/gestor/whatsapp/conectar');
+
+      if (data.evolutionNaoConfigurado) { setEstadoConexao('sem-evolution'); return; }
+      if (data.evolutionIndisponivel)   { setEstadoConexao('offline'); return; }
+      if (data.conectado)               { setEstadoConexao('conectado'); setQrcodeBase64(null); return; }
+      if (data.qrcode?.base64)          { setEstadoConexao('qrcode'); setQrcodeBase64(data.qrcode.base64); return; }
+      if (data.precisaReconectar)       { setEstadoConexao('aguardando'); return; }
+      setEstadoConexao('aguardando');
+    } catch {
+      setEstadoConexao('erro');
+    }
+  }, []);
+
+  const gerarNovoQr = async () => {
+    setGerandoQr(true);
+    setErroQr('');
+    try {
+      const data = await apiFetch<{ qrcode?: { base64?: string } }>('/api/gestor/whatsapp/conectar', { method: 'POST' });
+      if (data.qrcode?.base64) { setQrcodeBase64(data.qrcode.base64); setEstadoConexao('qrcode'); }
+      else setEstadoConexao('aguardando');
+    } catch (err) {
+      setErroQr(describeApiError(err));
+    } finally {
+      setGerandoQr(false);
+    }
+  };
+
+  useEffect(() => {
+    void fetchConexao();
+  }, [fetchConexao]);
+
+  useEffect(() => {
+    if (estadoConexao === 'conectado' || estadoConexao === 'sem-evolution') return;
+    const id = setInterval(() => { void fetchConexao(); }, 5000);
+    return () => clearInterval(id);
+  }, [estadoConexao, fetchConexao]);
 
   const [aiEnabledState, setAiEnabledState] = useState(initAiEnabled);
   const [aiPersonaState, setAiPersonaState] = useState(initAiPersona ?? '');
@@ -93,6 +148,75 @@ export default function WhatsappClient({ telefone: initTelefone, aiEnabled: init
 
   return (
     <div className={styles.content}>
+
+      {/* ─── Conexão Evolution QR ─── */}
+      <div className={styles.card}>
+        <div className={styles.cardHeader}>
+          <div className={`${styles.iconWrap} ${estadoConexao === 'conectado' ? styles.iconOnline : styles.iconOffline}`}>
+            {estadoConexao === 'conectado' ? <Wifi size={20} /> : <WifiOff size={20} />}
+          </div>
+          <div className={styles.cardTitleGroup}>
+            <h2 className={styles.cardTitulo}>Conexão WhatsApp</h2>
+            <p className={styles.cardSubtitulo}>Vincule seu número via QR code para ativar o assistente</p>
+          </div>
+          {estadoConexao === 'conectado' && <span className={`${styles.badge} ${styles.badgeOnline}`}>Conectado</span>}
+          {(estadoConexao === 'qrcode' || estadoConexao === 'aguardando' || estadoConexao === 'loading') && (
+            <span className={`${styles.badge} ${styles.badgeOffline}`}>Desconectado</span>
+          )}
+        </div>
+
+        {estadoConexao === 'sem-evolution' && (
+          <p className={styles.webhookHint}>
+            Evolution API não configurada. Adicione <code>EVOLUTION_API_URL</code> e <code>EVOLUTION_API_KEY</code> ao <code>.env.local</code> e reinicie o servidor.
+          </p>
+        )}
+
+        {estadoConexao === 'offline' && (
+          <p className={styles.erroMsg}>Evolution API offline. Verifique se o Docker está rodando: <code>docker compose up -d evolution-api</code></p>
+        )}
+
+        {estadoConexao === 'conectado' && (
+          <p className={styles.webhookHint}>WhatsApp conectado. O assistente IA está ativo e pronto para receber mensagens.</p>
+        )}
+
+        {(estadoConexao === 'qrcode' || estadoConexao === 'aguardando' || estadoConexao === 'loading') && (
+          <div className={styles.qrcodeSection}>
+            {estadoConexao === 'qrcode' && qrcodeBase64 ? (
+              <Image
+                src={qrcodeBase64}
+                alt="QR Code WhatsApp"
+                width={200}
+                height={200}
+                className={styles.qrcodeImg}
+                unoptimized
+              />
+            ) : (
+              <div className={styles.qrcodePlaceholder}>
+                {estadoConexao === 'loading' ? (
+                  <RefreshCw size={28} className={styles.spinning} />
+                ) : (
+                  <QrCode size={28} />
+                )}
+                <span>{estadoConexao === 'loading' ? 'Carregando...' : 'Aguardando QR code...'}</span>
+              </div>
+            )}
+            <p className={styles.qrcodeInstrucao}>
+              Abra o WhatsApp no celular → Dispositivos Vinculados → Vincular Dispositivo → escaneie o QR code.
+            </p>
+          </div>
+        )}
+
+        {erroQr && <p className={styles.erroMsg}>{erroQr}</p>}
+
+        {estadoConexao !== 'sem-evolution' && estadoConexao !== 'conectado' && (
+          <div className={styles.cardFooter}>
+            <button className="btn-primary" onClick={gerarNovoQr} disabled={gerandoQr}>
+              <RefreshCw size={14} className={gerandoQr ? styles.spinning : ''} />
+              {gerandoQr ? 'Gerando...' : 'Gerar novo QR'}
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* ─── Link WhatsApp ─── */}
       <div className={styles.card}>

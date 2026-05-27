@@ -8,6 +8,7 @@ import {
   ArrowRight, CheckCircle2, Wifi, WifiOff, SkipForward,
 } from 'lucide-react';
 import VennLogo from '@/components/VennLogo';
+import { maskBRL, unmaskBRLCentavos, maskMinutos } from '@/lib/format';
 import { apiFetch, describeApiError } from '@/lib/api-client';
 import { maskTelefoneBR, unmaskTelefone } from '@/lib/format';
 import styles from './onboarding.module.css';
@@ -90,7 +91,7 @@ export default function OnboardingClient() {
   const criarServico = async (e: React.FormEvent) => {
     e.preventDefault();
     setErro('');
-    const preco = Math.round(parseFloat(precoStr.replace(',', '.')) * 100);
+    const preco = unmaskBRLCentavos(precoStr);
     const duracao = parseInt(duracaoStr, 10);
     if (isNaN(preco) || preco < 0) { setErro('Preço inválido.'); return; }
     if (isNaN(duracao) || duracao < 5) { setErro('Duração mínima: 5 minutos.'); return; }
@@ -233,13 +234,12 @@ export default function OnboardingClient() {
                       <DollarSign size={14} className={styles.inputIcon} />
                       <input
                         id="ob-servico-preco"
-                        type="number"
-                        min="0"
-                        step="0.01"
+                        type="text"
+                        inputMode="numeric"
                         className={styles.input}
-                        placeholder="50,00"
+                        placeholder="0,00"
                         value={precoStr}
-                        onChange={(e) => setPrecoStr(e.target.value)}
+                        onChange={(e) => setPrecoStr(maskBRL(e.target.value))}
                         required
                       />
                     </div>
@@ -250,13 +250,12 @@ export default function OnboardingClient() {
                       <Clock size={14} className={styles.inputIcon} />
                       <input
                         id="ob-servico-duracao"
-                        type="number"
-                        min="5"
-                        max="600"
+                        type="text"
+                        inputMode="numeric"
                         className={styles.input}
                         placeholder="30"
                         value={duracaoStr}
-                        onChange={(e) => setDuracaoStr(e.target.value)}
+                        onChange={(e) => setDuracaoStr(maskMinutos(e.target.value))}
                         required
                       />
                     </div>

@@ -95,19 +95,23 @@ async function dispatch(data: EvolutionPayload): Promise<void> {
 
 export async function POST(req: Request): Promise<Response> {
   try {
+    // Evolution API v2 global webhooks do NOT send an apikey header.
+    // We validate only against EVOLUTION_WEBHOOK_SECRET (an inbound-only secret).
+    // If not set, bypass auth in dev; block in production.
     const apikeyHeader = req.headers.get("apikey") ?? "";
-    // Prefer EVOLUTION_WEBHOOK_SECRET (inbound-only secret); fall back to EVOLUTION_API_KEY.
-    const expectedKey = env.EVOLUTION_WEBHOOK_SECRET ?? env.EVOLUTION_API_KEY;
-    if (!expectedKey) {
+    const webhookSecret = env.EVOLUTION_WEBHOOK_SECRET;
+
+    if (!webhookSecret) {
       if (isProductionRuntime) {
+        logger.warn("[webhook/evolution] EVOLUTION_WEBHOOK_SECRET não definido em produção — bloqueado");
         return new Response("Forbidden", { status: 403 });
       }
-      logger.warn("[webhook/evolution] EVOLUTION_WEBHOOK_SECRET/EVOLUTION_API_KEY não definido — validação ignorada (dev only)");
+      logger.warn("[webhook/evolution] EVOLUTION_WEBHOOK_SECRET não definido — validação ignorada (dev only)");
     } else {
       const headerBuf = Buffer.from(apikeyHeader, "utf8");
-      const expectedBuf = Buffer.from(expectedKey, "utf8");
+      const expectedBuf = Buffer.from(webhookSecret, "utf8");
       if (headerBuf.length !== expectedBuf.length || !timingSafeEqual(headerBuf, expectedBuf)) {
-        logger.warn("[webhook/evolution] apikey inválida");
+        logger.warn({ apikeyHeader }, "[webhook/evolution] apikey inválida");
         return new Response("Forbidden", { status: 403 });
       }
     }
