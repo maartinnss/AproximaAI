@@ -1,7 +1,5 @@
 import { vi } from "vitest";
 
-Object.defineProperty(process.env, "NODE_ENV", { value: "test", writable: true });
-
 process.env.AUTH_SECRET = "test-secret-with-at-least-32-characters-xxxx";
 process.env.DATABASE_URL = "postgres://test:test@localhost:5432/test";
 process.env.META_VERIFY_TOKEN = "verify-me";
