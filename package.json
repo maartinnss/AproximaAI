@@ -18,7 +18,7 @@
     "db:reset": "prisma migrate reset",
     "test": "vitest run",
     "test:watch": "vitest",
-    "worker:wa": "tsx --require ./src/workers/server-only-mock.cjs --tsconfig tsconfig.json src/workers/wa-worker.ts"
+    "worker:wa": "tsx --require ./src/workers/server-only-mock.cjs src/workers/wa-worker.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.0",
