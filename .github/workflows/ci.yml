@@ -11,6 +11,14 @@ jobs:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
       AUTH_SECRET: test-secret-with-at-least-32-characters-xxxx
       APP_URL: http://localhost:3000
+      REDIS_URL: redis://localhost:6379
+      EVOLUTION_API_URL: http://localhost:8080
+      EVOLUTION_API_KEY: ci-dummy-key
+      EVOLUTION_WEBHOOK_SECRET: ci-dummy-secret
+      META_VERIFY_TOKEN: ci-dummy-verify
+      META_APP_SECRET: ci-dummy-app-secret
+      META_ACCESS_TOKEN: ci-dummy-token
+      META_GRAPH_VERSION: v21.0
     steps:
       - name: Checkout
         uses: actions/checkout@v4
